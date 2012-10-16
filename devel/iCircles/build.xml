@@ -50,7 +50,7 @@ Build, test, run and package iCricles.
         <javac srcdir             = "${src}"
         	destdir           = "${build}"
         	debug             = "${debug.build}"
-        	classpath         = "${lib}/batik-all.jar"
+        	classpath         = "${lib}/batik-all.jar:${lib}/xml-apis-ext.jar"
         	includeantruntime = "false"
         	source="1.6"
         	target="1.6"
