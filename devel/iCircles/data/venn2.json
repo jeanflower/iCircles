@@ -1,4 +1,4 @@
-{"ShadowAbstractDiagram" :
+{"AbstractDiagram" :
    {
     "Contours"    : ["Contour1", "Contour2"],
     "Zones"       : [{"in" : ["Contour1"]}, {"in" : ["Contour2"]}, {"in" : ["Contour1", "Contour2"]}],
