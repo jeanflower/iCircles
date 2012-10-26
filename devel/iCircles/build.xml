@@ -16,16 +16,28 @@ Build, test, run and package iCricles.
     <property name="api.docs" location="docs/api"/>
     <property name="debug.build" value="true"/>
 
+    <path id="classpath.build">
+      <fileset id="build.fileset" dir="${lib}">
+	<include name="batik-all.jar" />
+	<include name="xml-apis.jar" />
+	<include name="xml-apis-ext.jar" />
+	<include name="jackson-core-2.1.0.jar" />
+	<include name="jackson-annotations-2.1.0.jar" />
+	<include name="jackson-databind-2.1.0.jar" />
+	<include name="commons-cli-1.2.jar" />
+      </fileset>
+    </path>
+
     <path id="classpath.test">
       <fileset dir="${lib}">
 	<!-- Pull in JUnit -->
 	<include name="junit4.jar"/>
-    	<!-- Ensure ant has the JUnit taskdef -->
-        <include name="ant-junit.jar"/>
+	<!-- Ensure ant has the JUnit taskdef -->
+	<include name="ant-junit.jar"/>
 	<!-- Pull in JCheck -->
 	<include name="jcheck-0.1.jar"/>
       </fileset>
-      <pathelement location="${classpath}" />
+      <fileset refid="build.fileset" />
       <pathelement location="${build}" />
     </path>
 
@@ -47,14 +59,15 @@ Build, test, run and package iCricles.
     <target name="compile" depends="init"
             description="compile the source" >
         <!-- Compile the java code from ${src} into ${build} -->
+	<!-- TODO: make the classpath an Ant Path -->
         <javac srcdir             = "${src}"
         	destdir           = "${build}"
         	debug             = "${debug.build}"
-        	classpath         = "${lib}/batik-all.jar:${lib}/xml-apis-ext.jar"
         	includeantruntime = "false"
         	source="1.6"
         	target="1.6"
         	>
+          <classpath refid="classpath.build" />
 	</javac>
     </target>
 

@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.w3c.dom.svg.SVGDocument;
+
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.*;

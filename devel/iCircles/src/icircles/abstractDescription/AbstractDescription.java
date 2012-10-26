@@ -40,6 +40,7 @@ import java.util.TreeSet;
 import java.util.StringTokenizer;
 import java.util.Random;
 
+import icircles.input.AbstractDiagram;
 import icircles.util.DEB;
 
 /**
@@ -69,6 +70,13 @@ public class AbstractDescription {
 
     ArrayList<AbstractSpider> m_spiders;
 
+    public AbstractDescription(AbstractDiagram sad) {
+    	m_contours     = new TreeSet<AbstractCurve>();
+    	m_zones        = new TreeSet<AbstractBasicRegion>();
+    	m_shaded_zones = new TreeSet<AbstractBasicRegion>();
+    	m_spiders      = new ArrayList<AbstractSpider>();
+    }
+    
     public AbstractDescription(Set<AbstractCurve> contours,
 			       Set<AbstractBasicRegion> zones,
 			       Set<AbstractBasicRegion> shaded_zones) {
