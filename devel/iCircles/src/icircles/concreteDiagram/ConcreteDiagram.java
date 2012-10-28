@@ -115,11 +115,6 @@ public class ConcreteDiagram {
      * @throws CannotDrawException
      */
     public static ConcreteDiagram makeConcreteDiagram(AbstractDescription ad, int size) throws CannotDrawException {
-        // TODO
-        if (!ad.checks_ok()) {
-            // not drawable
-            throw new CannotDrawException("badly formed diagram spec");
-        }
         DiagramCreator dc = new DiagramCreator(ad);
         ConcreteDiagram cd = dc.createDiagram(size);
         return cd;
