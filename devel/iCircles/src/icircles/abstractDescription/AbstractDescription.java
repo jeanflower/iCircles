@@ -69,19 +69,19 @@ public class AbstractDescription {
     Set<AbstractBasicRegion> m_shaded_zones;
 
     ArrayList<AbstractSpider> m_spiders;
-
-    public AbstractDescription(AbstractDiagram sad) {
-    	m_contours     = new TreeSet<AbstractCurve>();
-    	m_zones        = new TreeSet<AbstractBasicRegion>();
-    	m_shaded_zones = new TreeSet<AbstractBasicRegion>();
-    	m_spiders      = new ArrayList<AbstractSpider>();
+    
+    public AbstractDescription(Set<AbstractCurve> contours,
+		       Set<AbstractBasicRegion> zones,
+		       Set<AbstractBasicRegion> shaded_zones,
+		       Set<AbstractSpider> spiders) {
+    	this(contours, zones, shaded_zones);
+    	m_spiders = new ArrayList<AbstractSpider>(spiders);
     }
     
     public AbstractDescription(Set<AbstractCurve> contours,
 			       Set<AbstractBasicRegion> zones,
 			       Set<AbstractBasicRegion> shaded_zones) {
-        m_contours = new TreeSet<AbstractCurve>(contours);
-        m_zones = new TreeSet<AbstractBasicRegion>(zones);
+    	this(contours, zones);
         m_shaded_zones = new TreeSet<AbstractBasicRegion>(shaded_zones);
         m_spiders = new ArrayList<AbstractSpider>();
     }
@@ -93,14 +93,6 @@ public class AbstractDescription {
 		m_shaded_zones = new TreeSet<AbstractBasicRegion>();
         m_spiders = new ArrayList<AbstractSpider>();
 	}
-
-    //TODO
-    public boolean checks_ok()
-    {
-    	// do some validity checks
-    	// is every contour in a zone? etc.
-    	return true;
-    }
 
     public void addSpider(AbstractSpider s){
     	// TODO : check that feet are indeed AbstractBasicRegions of the diagram
