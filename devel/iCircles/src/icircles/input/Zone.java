@@ -29,6 +29,19 @@ public class Zone {
 		return AbstractBasicRegion.get(ts);
 	}
 	
+	/**
+	 * Finds a previously defined AbstractCurve in the contour set of the diagram.
+	 * {@see AbstractCurve}s are tuples of an {@see ContourLabel} and an id.  Thus
+	 * we cannot simply create new {@see AbstractCurve}s.  We must re-use a 
+	 * previously created AbstractCurve i.e. the one with the correct id.
+	 * 
+	 * FIXME: This design suggests a bug in AbstractCurve, particularly when we
+	 * wish to define contours ("A", 1) and ("A", 2) and pick a specific one. 
+	 * 
+	 * @param contours The contour set of the diagram.
+	 * @param label The label of the curve that we are looking for.
+	 * @return A previously defined AbstractCurve that matches the label.
+	 */
 	private AbstractCurve getAbstractCurve (Set <AbstractCurve> contours, CurveLabel label) {
 		for(AbstractCurve ac : contours) {
 			if(ac.getLabel().getLabel() == label.getLabel()) {
