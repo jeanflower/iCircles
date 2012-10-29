@@ -3,6 +3,8 @@ package icircles.abstractDescription;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+
 import org.jcheck.annotations.Configuration;
 import org.jcheck.annotations.Generator;
 
@@ -30,5 +32,18 @@ public class TestAbstractCurve {
     		assertTrue(c1.compareTo(c2) < 0);
     		assertTrue(c2.compareTo(c1) > 0);
     	}
+    }
+    
+    @Test
+    public void testACEquivalence () {
+    	CurveLabel    a  = CurveLabel.get("a");
+    	AbstractCurve a1 = new AbstractCurve(a);
+    	AbstractCurve a2 = new AbstractCurve(a);
+    	
+    	// Reference equality fails
+    	assertFalse(a1 == a2);
+    	
+    	// Deep equality fails
+    	assertThat(a1, is(not(a2)));
     }
 }

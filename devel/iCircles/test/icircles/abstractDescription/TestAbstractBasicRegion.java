@@ -33,11 +33,13 @@ package icircles.abstractDescription;
  */
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import org.jcheck.*;
 import org.jcheck.annotations.Configuration;
 import org.jcheck.annotations.Generator;
@@ -215,5 +217,28 @@ public class TestAbstractBasicRegion {
 	AbstractCurve first = in_set.first();
 	assertFalse(abr1.moveOutside(first).isLabelEquivalent(abr2));
 	assertFalse(abr1.isLabelEquivalent(abr2.moveOutside(first)));
+    }
+    
+    @Test
+    public void testABREquivalence () {
+    	CurveLabel    a  = CurveLabel.get("a");
+    	AbstractCurve a1 = new AbstractCurve(a);
+    	AbstractCurve a2 = new AbstractCurve(a);
+    	
+    	Set<AbstractCurve> sa1 = new TreeSet<AbstractCurve>();
+    	sa1.add(a1);
+    	Set<AbstractCurve> sa2 = new TreeSet<AbstractCurve>();
+    	sa1.add(a2);
+    	
+    	AbstractBasicRegion abr1 = AbstractBasicRegion.get(sa1);
+    	AbstractBasicRegion abr2 = AbstractBasicRegion.get(sa2);
+
+    	
+    	// Reference equality
+    	assertTrue(abr1 != abr2);
+    	
+    	// Deep equality
+    	assertThat(abr1, is(not(abr2)));
+
     }
 }

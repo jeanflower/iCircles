@@ -44,7 +44,7 @@ import icircles.util.DEB;
  * in conjunction with {@link AbstractCurve} as follows:
  * <pre>
  * {@code
- * CurveLabel cl             = new CurveLabel("Example");
+ * CurveLabel cl             = CurveLabel.get("Example");
  * AbstractCurve ac          = new AbstractCurve(cl);
  * Set<AbstractCurve> ts     = new TreeSet<AbstractCurve>();
  * ts.add(ac);

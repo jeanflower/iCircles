@@ -106,7 +106,7 @@ public class CommandLineUI {
             ObjectMapper mapper = new ObjectMapper();
             try {
             	AbstractDiagram sad = mapper.readValue(new File(jsonFile), AbstractDiagram.class);
-                this.abstractDescription  = new AbstractDescription(sad); 
+                this.abstractDescription  = sad.toAbstractDescription();
             } catch (Exception ex) { // IOException or IllegalArgumentException
                 ex.printStackTrace();
                 return false;

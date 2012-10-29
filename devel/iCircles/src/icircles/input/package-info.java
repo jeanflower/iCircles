@@ -32,14 +32,14 @@
 /**
  * Implements a parser for the iCircles input format.  The input format is JSON
  * based.  An example of which is the description of Venn2 with a shaded zone
- * containing two single-foot spiders in the shaded zone shown below:
+ * containing a single-footed spider in the shaded zone shown below:
  * <pre>
  * {@code
  * {"AbstractDiagram" :
  *   {"Contours"    : ["Contour1", "Contour2"],
  *    "Zones"       : [{"in" : ["Contour1"]}, {"in" : ["Contour2"]}, {"in" : ["Contour1", "Contour2"]}],
  *    "ShadedZones" : [{"in" : ["Contour1"]}],
- *    "Spiders"     : [{"count" : 2, "habitat" : [{"in" : ["Contour1"]}]}],
+ *    "Spiders"     : [{"name" : "spider1", "habitat" : [{"in" : ["Contour1"]}]}],
  *   } 
  * }
  * }

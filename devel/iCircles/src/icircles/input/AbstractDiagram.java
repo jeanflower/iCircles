@@ -1,7 +1,10 @@
 package icircles.input;
 
+import icircles.abstractDescription.*;
+
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -31,5 +34,35 @@ public class AbstractDiagram {
 	
 	private boolean verify() {
 		return true;
+	}
+
+	/**
+	 * Creates an AbstractDescription from this AbstractDiagram.
+	 * 
+	 * @return the AbstractDescription represented by this AbstractDiagram facade.
+	 */
+	public AbstractDescription toAbstractDescription () {
+		Set<AbstractCurve>       cs  = new TreeSet<AbstractCurve> ();
+		Set<AbstractBasicRegion> zs  = new TreeSet<AbstractBasicRegion> ();
+		Set<AbstractBasicRegion> szs = new TreeSet<AbstractBasicRegion> ();
+		Set<AbstractSpider>      ss  = new TreeSet<AbstractSpider> ();
+
+		for (String c : contours) {
+			cs.add(new AbstractCurve(CurveLabel.get(c)));
+		}
+		
+		for (Zone z : zones) {
+			zs.add(z.toAbstractBasicRegion(cs));
+		}
+		
+		for (Zone z : shadedZones) {
+			szs.add(z.toAbstractBasicRegion(cs));
+		}
+		
+		for (Spider s: spiders) {
+			ss.add(s.toAbstractSpider());
+		}
+	
+		return new AbstractDescription(cs, zs, szs, ss);
 	}
 }

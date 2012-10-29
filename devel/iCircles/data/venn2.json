@@ -1,8 +1,8 @@
 {"AbstractDiagram" :
    {
-    "Contours"    : ["Contour1", "Contour2"],
-    "Zones"       : [{"in" : ["Contour1"]}, {"in" : ["Contour2"]}, {"in" : ["Contour1", "Contour2"]}],
-    "ShadedZones" : [{"in" : ["Contour1"]}],
-    "Spiders"     : [{"count" : 2, "habitat" : [{"in" : ["Contour1"]}]}]
+    "Contours"    : ["a", "b"],
+    "Zones"       : [{"in" : []}, {"in" : ["a"]}, {"in" : ["b"]}, {"in" : ["a", "b"]}],
+    "ShadedZones" : [],
+    "Spiders"     : []
    }
 }
