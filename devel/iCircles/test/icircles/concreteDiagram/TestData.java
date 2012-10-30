@@ -18,6 +18,14 @@ class TestData {
                         " 'ShadedZones' : []," +
                         " 'Spiders'     : []" +
                         "}" +
-                       "}", 80.35747263647977)
+                       "}", 80.35747263647977),
+        new TestDatum ("{'AbstractDiagram' : " +
+                        "{'Version'     : 0," +
+                        " 'Contours'    : ['a', 'b']," +
+                        " 'Zones'       : [{'in' : []},{'in' : ['a']}, {'in' : ['b']}]," +
+                        " 'ShadedZones' : []," +
+                        " 'Spiders'     : []" +
+                        "}" +
+                       "}", 131.7353635695516)
     };
 }
