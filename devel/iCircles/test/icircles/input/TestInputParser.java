@@ -124,4 +124,27 @@ public class TestInputParser {
 
         fail();
     }
+    
+    @Test
+    public void testProperlyDefinedSpider () {
+        // d describes a diagram with contours, zones but a shaded zone that
+        // doesn't exist.
+        String          d  = "{\"AbstractDiagram\" : {\"Version\" : 0, \"Contours\"    : [\"a\"], "
+                                                                    + "\"Zones\"       : [{\"in\" : [\"\"]}],"
+                                                                    + "\"ShadedZones\" : [],"
+                                                                    + "\"Spiders\"     : [{\"name\" : \"s1\", \"habitat\" : [{\"in\" : [\"\"]}]}]"
+                                                                    + "}}";
+        ObjectMapper    m  = new ObjectMapper();
+        AbstractDiagram ad = null;
+        
+        try {
+            ad = m.readValue(d, AbstractDiagram.class);
+        } catch (JsonMappingException jme) {
+            fail("Creation of diagram from JSON string failed, string = " + d);
+        } catch (Exception e) {
+        	fail();
+        }
+
+        assertNotNull(ad);
+    }
 }

@@ -17,8 +17,9 @@ public class TestSpider {
         cs.add("");
         Zone         z  = new Zone(cs);
         
+        Set <String> c2 = new HashSet<String>();
         Set <Zone>   zs = new HashSet<Zone>();
-        zs.add(z);
+        zs.add(new Zone(c2));
         Spider       s  = new Spider("s1", zs);
 
         assertTrue(s.verify(zs));

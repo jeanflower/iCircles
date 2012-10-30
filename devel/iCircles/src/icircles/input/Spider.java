@@ -29,22 +29,7 @@ public class Spider {
 	}
 
 	public boolean verify(Set <Zone> zones) {
-	    // Do this the long way
-	    for(Zone z1 : habitat) {
-	        boolean foundFlag = false;
-	        for(Zone z2 : zones) {
-	            if(z1.equals(z2)) {
-	                foundFlag = true;
-	            }
-	        }
-	        if(!foundFlag) {
-	            return false;
-	        }
-	    }
-	    return true;
-	    
-	    // TODO: Find out why this doesn't work.
-	    //return zones.containsAll(habitat);
+	    return zones.containsAll(habitat);
 	}
 
 	public String toString() {

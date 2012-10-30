@@ -98,6 +98,12 @@ public class Zone {
         Zone other = (Zone) obj;
         return in.equals(other.in);
     }
+    
+    @Override
+    public int hashCode() {
+    	// Just return the code of the underlying set
+    	return in.hashCode();
+    }
 
 	/**
 	 * Finds a previously defined AbstractCurve in the contour set of the diagram.
