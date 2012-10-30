@@ -17,13 +17,6 @@ public class AbstractDiagram {
 	private Set<Zone> shadedZones;
 	private Set<Spider> spiders;
 	
-	public AbstractDiagram (Set <String> contours, Set<Zone> zones, Set<Zone> shadedZones, Set<Spider> spiders) {
-        this.contours    = contours;
-        this.zones       = zones;
-        this.shadedZones = shadedZones;
-        this.spiders     = spiders;
-	}
-	
 	@JsonCreator
 	public AbstractDiagram (
 	        @JsonProperty(value="Version")     int version,
@@ -31,9 +24,12 @@ public class AbstractDiagram {
 			@JsonProperty(value="Zones")       Set<Zone> zones,
 			@JsonProperty(value="ShadedZones") Set<Zone> shadedZones,
 			@JsonProperty(value="Spiders")     Set<Spider> spiders) throws IllegalArgumentException {
-	    this(contours, zones, shadedZones, spiders);
 	    this.version     = version;
-		
+        this.contours    = contours;
+        this.zones       = zones;
+        this.shadedZones = shadedZones;
+        this.spiders     = spiders;
+
 		try {
 		    verify();
 		} catch (IllegalArgumentException iae) {
