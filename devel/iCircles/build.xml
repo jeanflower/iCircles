@@ -76,6 +76,7 @@ Build, test, run and package iCricles.
       <javac srcdir            = "${test}"
 	     destdir           = "${build}"
 	     debug             = "${debug.build}"
+         encoding          = "UTF-8"
 	     includeantruntime = "false">
 	<classpath refid="classpath.test" />
       </javac>
