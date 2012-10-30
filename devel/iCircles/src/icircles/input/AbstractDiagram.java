@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.*;
 // Make ShadowAbstractDiagram appear in serialised JSON as "AbstractDiagram"
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT, property="AbstractDiagram")
 public class AbstractDiagram {
+    private int version = 0;
 	private List<String> contours;
 	private List<Zone> zones;
 	private List<Zone> shadedZones;
@@ -18,10 +19,12 @@ public class AbstractDiagram {
 	
 	@JsonCreator
 	public AbstractDiagram (
+	        @JsonProperty(value="Version")     int version,
 			@JsonProperty(value="Contours")    List<String> contours, 
 			@JsonProperty(value="Zones")       List<Zone> zones,
 			@JsonProperty(value="ShadedZones") List<Zone> shadedZones,
 			@JsonProperty(value="Spiders")     List<Spider> spiders) throws IllegalArgumentException {
+	    this.version     = version;
 		this.contours    = contours;
 		this.zones       = zones;
 		this.shadedZones = shadedZones;
@@ -60,7 +63,7 @@ public class AbstractDiagram {
 		}
 		
 		for (Spider s: spiders) {
-			ss.add(s.toAbstractSpider());
+			ss.add(s.toAbstractSpider(cs));
 		}
 	
 		return new AbstractDescription(cs, zs, szs, ss);
