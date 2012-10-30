@@ -2,16 +2,23 @@ package icircles.input;
 
 import icircles.abstractDescription.*;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 public class Zone {
-	@JsonProperty(value="in")
-	private List <String> in;
+	private Set <String> in;
 	
+	/**
+	 * We need to construct Zones for testing, so this provides the constructor.
+	 */
+	@JsonCreator
+	public Zone (@JsonProperty(value="in") Set <String> in) {
+	    this.in = in;
+	}
+
 	/**
 	 * A Zone is a simple structure that allows us to, eventually create an
 	 * {@see abstractDescription.AbstractBasicRegion}.
@@ -29,6 +36,69 @@ public class Zone {
 		return AbstractBasicRegion.get(ts);
 	}
 	
+	/**
+	 * Verify whether each of the listed contours of this zone is actually a
+	 * defined contour.
+	 * @param contours The set of contrours to check against.
+	 * @return True if everything in 'in' is a contour, false otherwise.
+	 */
+	public boolean verify (Set <String> contours) {
+	    // if this is the outside zone, return true
+	    if(in.size() > 0) {
+	        String [] a = in.toArray(new String[0]);
+	        if("" == a[0]) {
+	            return true;
+	        }
+	    }
+
+	    // otherwise check to see if all the labels in 'in' are contours
+	    return contours.containsAll(in);
+	}
+	
+	/**
+	 * Return a Zone string in JSON format.
+	 * We eschew the use of the object mapper here as it can throw a
+	 * JsonMatchingException in the writeValue call as seen below:
+	 * <pre>  
+	 * {@code
+	 *  ObjectMapper m = new ObjectMapper();
+     *  StringWriter w = new StringWriter();
+     *  
+     *  m.writeValue(w, this);
+     *  
+     *  return w.toString(); 
+	 * }
+	 * </pre>
+	 * @return A string representation of this Zone as JSON.
+	 */
+	public String toString() {
+	    StringBuilder     builder = new StringBuilder("{\"in\" : [");
+	    Iterator <String> iter    = in.iterator();
+
+	    while (iter.hasNext()) {
+	         builder.append("\"" + iter.next() + "\"");
+	         if (!iter.hasNext()) {
+	           break;                  
+	         }
+	         builder.append(",");
+	     }
+
+	    builder.append("]}");
+	    return builder.toString();
+	}
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Zone))
+            return false;
+        
+        Zone other = (Zone) obj;
+        return in.equals(other.in);
+    }
+
 	/**
 	 * Finds a previously defined AbstractCurve in the contour set of the diagram.
 	 * {@see AbstractCurve}s are tuples of an {@see ContourLabel} and an id.  Thus
@@ -52,4 +122,5 @@ public class Zone {
 		// using a contour that has not been defined. 
 		return null;
 	}
+
 }

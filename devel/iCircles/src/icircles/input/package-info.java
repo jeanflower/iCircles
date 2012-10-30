@@ -36,7 +36,9 @@
  * <pre>
  * {@code
  * {"AbstractDiagram" :
- *   {"Contours"    : ["Contour1", "Contour2"],
+ *   {
+ *    "Version"     : 0,
+ *    "Contours"    : ["Contour1", "Contour2"],
  *    "Zones"       : [{"in" : ["Contour1"]}, {"in" : ["Contour2"]}, {"in" : ["Contour1", "Contour2"]}],
  *    "ShadedZones" : [{"in" : ["Contour1"]}],
  *    "Spiders"     : [{"name" : "spider1", "habitat" : [{"in" : ["Contour1"]}]}],

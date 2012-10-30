@@ -1,6 +1,7 @@
 package icircles.concreteDiagram;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -25,11 +26,17 @@ import static org.hamcrest.CoreMatchers.is;
 import icircles.abstractDescription.*;
 import icircles.concreteDiagram.*;
 import icircles.gui.CirclesSVGGenerator;
-import icircles.test.*;
+import icircles.input.AbstractDiagram;
+import icircles.test.TestDatum;
 import icircles.util.CannotDrawException;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(value = Parameterized.class)
 public class TestConcreteDiagram {
@@ -83,8 +90,16 @@ public class TestConcreteDiagram {
 	 
 	@Test
 	public void testAllDiagrams() {
-		AbstractDescription ad = AbstractDescription.makeForTesting(datum.description);
-		DiagramCreator      dc = new DiagramCreator(ad);
+	    ObjectMapper        m  = new ObjectMapper();
+	    m.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+	    AbstractDiagram ad = null;
+        try {
+            ad = m.readValue(datum.description, AbstractDiagram.class);
+        } catch (IOException e) { // JsonParseException | JsonMappingException
+            e.printStackTrace();
+            assertTrue(false);
+        }
+		DiagramCreator      dc = new DiagramCreator(ad.toAbstractDescription());
 		
 		// Don't simply report an assertion failure and exit, use the ErrorCollector
 		// to record all errors.  We'll deal with them later.

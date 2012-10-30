@@ -11,29 +11,63 @@ import com.fasterxml.jackson.annotation.*;
 // Make ShadowAbstractDiagram appear in serialised JSON as "AbstractDiagram"
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT, property="AbstractDiagram")
 public class AbstractDiagram {
-	private List<String> contours;
-	private List<Zone> zones;
-	private List<Zone> shadedZones;
-	private List<Spider> spiders;
+    private int version = 0;
+	private Set<String> contours;
+	private Set<Zone> zones;
+	private Set<Zone> shadedZones;
+	private Set<Spider> spiders;
 	
 	@JsonCreator
 	public AbstractDiagram (
-			@JsonProperty(value="Contours")    List<String> contours, 
-			@JsonProperty(value="Zones")       List<Zone> zones,
-			@JsonProperty(value="ShadedZones") List<Zone> shadedZones,
-			@JsonProperty(value="Spiders")     List<Spider> spiders) throws IllegalArgumentException {
-		this.contours    = contours;
-		this.zones       = zones;
-		this.shadedZones = shadedZones;
-		this.spiders     = spiders;
-		
-		if(!verify()) {
-			throw new IllegalArgumentException();
+	        @JsonProperty(value="Version")     int version,
+			@JsonProperty(value="Contours")    Set<String> contours, 
+			@JsonProperty(value="Zones")       Set<Zone> zones,
+			@JsonProperty(value="ShadedZones") Set<Zone> shadedZones,
+			@JsonProperty(value="Spiders")     Set<Spider> spiders) throws IllegalArgumentException {
+	    this.version     = version;
+        this.contours    = contours;
+        this.zones       = zones;
+        this.shadedZones = shadedZones;
+        this.spiders     = spiders;
+
+		try {
+		    verify();
+		} catch (IllegalArgumentException iae) {
+		    throw iae;
 		}
 	}
 	
-	private boolean verify() {
-		return true;
+	/**
+	 * Verifies that the deserialised JSON objects are valid AbstractDiagrams.
+	 * Verification occurs in three steps:
+	 * <ul>
+	 * <li>Check that each zone is composed of defined contours.</li>
+	 * <li>Check that shadedZones is a subset of zones.</li>
+	 * <li>Check that the habitat of each spider is a subset of zones.</li>
+	 * </ul>
+	 * @throws IllegalArgumentException
+	 */
+	private void verify() throws IllegalArgumentException {
+	    // TODO: Check that the outside zone is defined.
+
+	    // Check that each zone is composed of defined contours.
+	    for(Zone z : zones) {
+	        if(!z.verify(contours)) {
+	            throw new IllegalArgumentException("All contours of zone " + z.toString() + " are not defined.");
+	        }
+	    }
+
+	    // Check that shadedZones is a subset of zones.
+	    if(!zones.containsAll(shadedZones)) {
+	        throw new IllegalArgumentException("All shaded zones must be defined as zones.");
+	    }
+
+	    // Check that the habitat of each spider is a subset of zones.
+	    for(Spider s : spiders) {
+	        if(!s.verify(zones)) {
+	            throw new IllegalArgumentException("The habitat of Spider " + s.toString() + " contains an zone not defined in " + zones.toString() + ".");
+	        }
+	    }
 	}
 
 	/**
@@ -60,9 +94,28 @@ public class AbstractDiagram {
 		}
 		
 		for (Spider s: spiders) {
-			ss.add(s.toAbstractSpider());
+			ss.add(s.toAbstractSpider(cs));
 		}
 	
 		return new AbstractDescription(cs, zs, szs, ss);
+	}
+
+	/**
+	 * Implements deep equality of AbstractDiagrams
+	 */
+	public boolean equals (Object obj) {
+	    if (this == obj)
+	        return true;
+	    if (obj == null)
+	        return false;
+	    if (!(obj instanceof AbstractDiagram))
+	        return false;
+
+	    // Cast so that we can get private class variables
+	    AbstractDiagram other = (AbstractDiagram) obj;
+	    return contours.equals(other.contours) 
+	            && zones.equals(other.zones)
+	            && shadedZones.equals(other.shadedZones)
+	            && spiders.equals(other.spiders);
 	}
 }

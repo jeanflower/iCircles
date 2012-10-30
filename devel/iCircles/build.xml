@@ -76,6 +76,7 @@ Build, test, run and package iCricles.
       <javac srcdir            = "${test}"
 	     destdir           = "${build}"
 	     debug             = "${debug.build}"
+         encoding          = "UTF-8"
 	     includeantruntime = "false">
 	<classpath refid="classpath.test" />
       </javac>
@@ -84,15 +85,18 @@ Build, test, run and package iCricles.
     <target name="run-test" depends="test"
 	    description="run the project tests" >
       <junit printsummary="yes" fork="yes" haltonfailure="yes">
-	<classpath refid="classpath.test" />
+        <classpath refid="classpath.test" />
 
-	<formatter type="plain"/>
-	<test name="icircles.abstractDescription.TestCurveLabel" />
-	<test name="icircles.abstractDescription.TestAbstractCurve" />
-	<test name="icircles.abstractDescription.TestAbstractBasicRegion" />
-	<test name="icircles.abstractDescription.TestAbstractDescription" />
+        <formatter type="plain"/>
+        <test name="icircles.abstractDescription.TestCurveLabel" />
+        <test name="icircles.abstractDescription.TestAbstractCurve" />
+        <test name="icircles.abstractDescription.TestAbstractBasicRegion" />
+        <test name="icircles.abstractDescription.TestAbstractDescription" />
 
-	<test name="icircles.concreteDiagram.TestConcreteDiagram" />
+        <test name="icircles.concreteDiagram.TestConcreteDiagram" />
+
+        <test name="icircles.input.TestSpider" />
+      	<test name="icircles.input.TestInputParser" />
       </junit>
     </target>
 
