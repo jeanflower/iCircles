@@ -24,7 +24,7 @@ import icircles.abstractDescription.AbstractDescription;
 public class TestCode {
 
     public static void main(String args[]) {
-    	
+        
         DEB.level = TestData.TEST_DEBUG_LEVEL;
         if (TestData.TASK == TestData.RUN_ALL_TESTS) {
             ArrayList<Integer> failures = runAllTests();
@@ -61,18 +61,18 @@ public class TestCode {
     }
 
     public static ArrayList<Integer> viewAllTests() {
-    	/*
-    	 * this block draws all the test data (many diagrams!)
-    	 */
-    	int[] testlist = {};
-		int num_tests = 0;
-    	if(TestData.TEST_EULER_THREE)
-    	{
-    		num_tests = 39;
-        } 
-    	else
+        /*
+         * this block draws all the test data (many diagrams!)
+         */
+        int[] testlist = {};
+        int num_tests = 0;
+        if(TestData.TEST_EULER_THREE)
         {
-    		num_tests = TestData.test_data.length;
+            num_tests = 39;
+        } 
+        else
+        {
+            num_tests = TestData.test_data.length;
         }
         testlist = new int[num_tests];
         for (int i = 0; i < num_tests; i++) 
@@ -127,12 +127,12 @@ public class TestCode {
                 return result;
             } else {
                 if (do_run) {
-                	int size = 0;
-                	if(TestData.GENERATE_ALL_TEST_DATA)
-                		size = TestData.TEST_PANEL_SIZE;
-                	else
-                		size = TestData.VIEW_PANEL_SIZE;
-                	
+                    int size = 0;
+                    if(TestData.GENERATE_ALL_TEST_DATA)
+                        size = TestData.TEST_PANEL_SIZE;
+                    else
+                        size = TestData.VIEW_PANEL_SIZE;
+                    
                     if (!run_test(test_num, false, false,size))
                         {
                         result.add(new Integer(test_num));
@@ -171,20 +171,20 @@ public class TestCode {
         return result;
     }
 
-//	private static boolean sleep(int time) 
-//		{
-//		try 
-//			{
-//			Thread.sleep(time);
-//			} 
-//		catch(Exception e) 
-//			{
-//			System.out.println("Exception occurred in Thread.sleep() "+e);
-//			e.printStackTrace();
-//			return false;
-//			}
-//		return true;
-//		}
+//  private static boolean sleep(int time) 
+//      {
+//      try 
+//          {
+//          Thread.sleep(time);
+//          } 
+//      catch(Exception e) 
+//          {
+//          System.out.println("Exception occurred in Thread.sleep() "+e);
+//          e.printStackTrace();
+//          return false;
+//          }
+//      return true;
+//      }
     private static boolean within_tol(double expected, double found) {
         if (isNaN(expected) && isNaN(found)) {
             return true;
@@ -224,7 +224,7 @@ public class TestCode {
             int size) {
         // clear the static id counter for abstract curves
         if (!view_failure) {
-	    //            AbstractCurve.reset_id_counter();
+        //            AbstractCurve.reset_id_counter();
             //AbstractBasicRegion.clearLibrary();
             //CurveLabel.clearLibrary();
         }
@@ -292,73 +292,73 @@ public class TestCode {
        
         CirclesPanel cp;
         if(cd != null)
-        	{
-		    cp = new CirclesPanel(description, failureMessage, cd,
-		                    true);// do use colours
-        	}
+            {
+            cp = new CirclesPanel(description, failureMessage, cd,
+                            true);// do use colours
+            }
         else
-	    	{
-		    cp = new CirclesPanel(description, failureMessage, size);
-	    	}
-        	
-	        cp.setScaleFactor(TestData.scale);
+            {
+            cp = new CirclesPanel(description, failureMessage, size);
+            }
+            
+            cp.setScaleFactor(TestData.scale);
         return cp;
     }
-//	static Rectangle getBoundingBox(ConstructedConcreteDiagram ccd)
-//	{
-//	int minX = Integer.MAX_VALUE;
-//	int maxX = Integer.MIN_VALUE;
-//	int minY = Integer.MAX_VALUE;
-//	int maxY = Integer.MIN_VALUE;
-//	
-//	for(ConcreteContour cc : ccd.getConcreteContours()){
-//		RegularPolygon rp = cc.getCircle();
-//		int lowX = rp.getCentreX() - rp.getRadius();
-//		int higX = rp.getCentreX() + rp.getRadius();
-//		int lowY = rp.getCentreY() - rp.getRadius();
-//		int higY = rp.getCentreY() + rp.getRadius();
-//		if(lowX < minX) minX = lowX;
-//		if(higX > maxX) maxX = higX;
-//		if(lowY < minY) minY = lowY;
-//		if(higY > maxY) maxY = higY;
-//	}
-//	return new Rectangle(minX, minY, maxX - minX, maxY - minY);
-//	}
-//	static ConstructedConcreteDiagram 
-//			transform(ConstructedConcreteDiagram ccd, 
-//						double xstep, double ystep, double scale,
-//						String desc)
-//	{
-//		ArrayList<ConcreteContour> newConts = new ArrayList<ConcreteContour>();
-//		for(ConcreteContour cc : ccd.getConcreteContours()){
-//			RegularPolygon rp = cc.getCircle();
-//			RegularPolygon newrp = new RegularPolygon(
-//					(int)((rp.getCentreX()+xstep)*scale),
-//					(int)((rp.getCentreY()+ystep)*scale),
-//					(int)(rp.getRadius()*scale),50);
-//			ConcreteContour newcc = 
-//				new ConcreteContour(cc.getAbstractContour(), newrp);
-//			newConts.add(newcc);
-//		}
-//		ConstructedConcreteDiagram result = 
-//			new ConstructedConcreteDiagram(desc, newConts);
-//		return result;
-//	}
+//  static Rectangle getBoundingBox(ConstructedConcreteDiagram ccd)
+//  {
+//  int minX = Integer.MAX_VALUE;
+//  int maxX = Integer.MIN_VALUE;
+//  int minY = Integer.MAX_VALUE;
+//  int maxY = Integer.MIN_VALUE;
+//  
+//  for(ConcreteContour cc : ccd.getConcreteContours()){
+//      RegularPolygon rp = cc.getCircle();
+//      int lowX = rp.getCentreX() - rp.getRadius();
+//      int higX = rp.getCentreX() + rp.getRadius();
+//      int lowY = rp.getCentreY() - rp.getRadius();
+//      int higY = rp.getCentreY() + rp.getRadius();
+//      if(lowX < minX) minX = lowX;
+//      if(higX > maxX) maxX = higX;
+//      if(lowY < minY) minY = lowY;
+//      if(higY > maxY) maxY = higY;
+//  }
+//  return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+//  }
+//  static ConstructedConcreteDiagram 
+//          transform(ConstructedConcreteDiagram ccd, 
+//                      double xstep, double ystep, double scale,
+//                      String desc)
+//  {
+//      ArrayList<ConcreteContour> newConts = new ArrayList<ConcreteContour>();
+//      for(ConcreteContour cc : ccd.getConcreteContours()){
+//          RegularPolygon rp = cc.getCircle();
+//          RegularPolygon newrp = new RegularPolygon(
+//                  (int)((rp.getCentreX()+xstep)*scale),
+//                  (int)((rp.getCentreY()+ystep)*scale),
+//                  (int)(rp.getRadius()*scale),50);
+//          ConcreteContour newcc = 
+//              new ConcreteContour(cc.getAbstractContour(), newrp);
+//          newConts.add(newcc);
+//      }
+//      ConstructedConcreteDiagram result = 
+//          new ConstructedConcreteDiagram(desc, newConts);
+//      return result;
+//  }
 
     private static ConcreteDiagram getDiagram(int test_num,
             int size) throws CannotDrawException {
-    	String desc = TestData.test_data[test_num].description;
+        String desc = TestData.test_data[test_num].description;
         // to test journalling...
         if(TestData.test_journalling){
-        	System.out.println("desc was "+desc);
+            System.out.println("desc was "+desc);
             AbstractDescription ad = AbstractDescription.makeForTesting(desc);
             System.out.println("ad is "+ad.debug());
             desc = ad.makeForTesting();
-        	System.out.println("desc is "+desc);
-        	
+            System.out.println("desc is "+desc);
+            
         } 
-    		
-	//        AbstractCurve.reset_id_counter();
+            
+    //        AbstractCurve.reset_id_counter();
         
         AbstractDescription ad = AbstractDescription.makeForTesting(desc, TestData.RANDOM_SHADING);
         DiagramCreator dc = new DiagramCreator(ad);

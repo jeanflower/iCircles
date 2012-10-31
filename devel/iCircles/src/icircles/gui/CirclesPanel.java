@@ -46,10 +46,10 @@ public class CirclesPanel extends JPanel {
     }
     
     private void init(String desc, 
-    		String failureMessage, 
-    		ConcreteDiagram diagram, 
-    		int size,
-    		boolean useColors)
+            String failureMessage, 
+            ConcreteDiagram diagram, 
+            int size,
+            boolean useColors)
     {
         this.cd = diagram;
         setLayout(new BorderLayout());
@@ -73,11 +73,11 @@ public class CirclesPanel extends JPanel {
         }
 
         if(diagram!=null)
-        	dp = new DiagramPanel(diagram, failureMessage, useColors);
+            dp = new DiagramPanel(diagram, failureMessage, useColors);
         else
-        	dp = new DiagramPanel(size, failureMessage);
+            dp = new DiagramPanel(size, failureMessage);
         //dp.setBorder(BorderFactory.createLineBorder(Color.black));
-    	
+        
         this.setPreferredSize(new Dimension(size, size + labelHeight));
         dp.setPreferredSize(new Dimension(size, size + labelHeight));
 
@@ -96,18 +96,18 @@ public class CirclesPanel extends JPanel {
     
     // to display failures
     public CirclesPanel(
-    		String desc, 
-    		String failureMessage, 
-    		int size) {
+            String desc, 
+            String failureMessage, 
+            int size) {
         init(desc, failureMessage, null, size, false/*useColors*/);
     }
 
     // constructor for non-null ConcreteDiagrams (will dereference for size)
     public CirclesPanel(
-    		String desc, 
-    		String failureMessage, 
-    		ConcreteDiagram diagram, 
-    		boolean useColors) {
+            String desc, 
+            String failureMessage, 
+            ConcreteDiagram diagram, 
+            boolean useColors) {
         int size = diagram.getSize();
         init(desc, failureMessage, diagram, size, useColors);
     }
@@ -123,7 +123,7 @@ public class CirclesPanel extends JPanel {
         boolean autoRescale;
 
         private void init(String failureMessage,
-        		boolean useColors,
+                boolean useColors,
                 int size)
         {
             setBackground(Color.white);
@@ -339,9 +339,9 @@ public class CirclesPanel extends JPanel {
             failuremessage = ex.message;
         }
         if(cd != null)
-        	return new CirclesPanel(diagText, failuremessage, cd, true); // do use colors
+            return new CirclesPanel(diagText, failuremessage, cd, true); // do use colors
         else
-        	return new CirclesPanel(diagText, failuremessage, size); // do use colors
+            return new CirclesPanel(diagText, failuremessage, size); // do use colors
     }
 
     /*
@@ -349,8 +349,8 @@ public class CirclesPanel extends JPanel {
         // See the implementation of makeForTesting to see how to make an 
         // AbstractDescription from scratch.
         AbstractDescription ad = AbstractDescription.makeForTesting(
-        		//"a ab abc ac",
-        		//"qh h fh ih ik kh b ab ac de bd  abc bfg fc bj l lc al m mn nc bc bco bo boj bp bop cq cqb rs ra s t");
+                //"a ab abc ac",
+                //"qh h fh ih ik kh b ab ac de bd  abc bfg fc bj l lc al m mn nc bc bco bo boj bp bop cq cqb rs ra s t");
                 "qh h fh ih ik kh b ab ac de bd  abc bfg fc bj l lc al m mn nc bc bco bo boj bp bop cq cqb rs ra s",
                 true); // randomised shading
         //"a ab b c");

@@ -66,29 +66,29 @@ public class TestAbstractBasicRegion {
     @Generator(klass=AbstractCurve.class, generator=CustomAbstractCurveGen.class)
     public void testGet(AbstractCurve[] acs) {
         if(0 == acs.length) {
-	    assertTrue(true);
-	    return;
+        assertTrue(true);
+        return;
         }
 
         TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
         AbstractBasicRegion abr1 = AbstractBasicRegion.get(in_set);
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr2 = AbstractBasicRegion.get(in_set);
 
-	assertEquals(abr1, abr2);
-	// get one of the AbstractCurves on the outside
-	AbstractCurve first = in_set.first();
-	abr2 = abr2.moveOutside(first);
+    assertEquals(abr1, abr2);
+    // get one of the AbstractCurves on the outside
+    AbstractCurve first = in_set.first();
+    abr2 = abr2.moveOutside(first);
 
-	assertFalse("abr1: " + abr1.journalString() + "\nabr2: " + abr2.journalString() , abr1.equals(abr2));
+    assertFalse("abr1: " + abr1.journalString() + "\nabr2: " + abr2.journalString() , abr1.equals(abr2));
     }
 
     /**
@@ -100,20 +100,20 @@ public class TestAbstractBasicRegion {
     @Generator(klass=AbstractCurve.class, generator=CustomAbstractCurveGen.class)
     public void testMoveOutsideMoved_In(AbstractCurve[] acs) {
         if(0 == acs.length) {
-	    assertTrue(true);
-	    return;
+        assertTrue(true);
+        return;
         }
 
-	TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
+    TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr1 = AbstractBasicRegion.get(in_set);
 
         AbstractCurve first = in_set.first();
-	assertEquals(abr1, abr1.moveOutside(first).moved_in(first));
+    assertEquals(abr1, abr1.moveOutside(first).moved_in(first));
     }
 
     @Test
@@ -121,29 +121,29 @@ public class TestAbstractBasicRegion {
     @Generator(klass=AbstractCurve.class, generator=CustomAbstractCurveGen.class)
     public void testCompareTo(AbstractCurve[] acs) {
         if(0 == acs.length) {
-	    assertTrue(true);
-	    return;
+        assertTrue(true);
+        return;
         }
 
         TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr1 = AbstractBasicRegion.get(in_set);
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr2 = AbstractBasicRegion.get(in_set);
 
-	assertEquals(0, abr1.compareTo(abr2));
+    assertEquals(0, abr1.compareTo(abr2));
 
-	AbstractCurve first = in_set.first();
-	assertEquals(-1, abr1.moveOutside(first).compareTo(abr2));
-	assertEquals(1, abr2.compareTo(abr1.moveOutside(first)));
+    AbstractCurve first = in_set.first();
+    assertEquals(-1, abr1.moveOutside(first).compareTo(abr2));
+    assertEquals(1, abr2.compareTo(abr1.moveOutside(first)));
     }
 
 
@@ -151,94 +151,94 @@ public class TestAbstractBasicRegion {
     @Configuration(tests=100, size=20) //limit the AbstractCurve[] to be lower than 20 elements 
     @Generator(klass=AbstractCurve.class, generator=CustomAbstractCurveGen.class)
     public void testGetStraddledContour(AbstractCurve[] acs) {
-	// need at least two controus for this test
-	if(acs.length < 2) {
-	    assertTrue(true);
-	    return;
-	}
+    // need at least two controus for this test
+    if(acs.length < 2) {
+        assertTrue(true);
+        return;
+    }
 
         TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr1 = AbstractBasicRegion.get(in_set);
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr2 = AbstractBasicRegion.get(in_set);
 
-	assertEquals(null, abr1.getStraddledContour(abr2));
-	assertEquals(null, abr2.getStraddledContour(abr1));
+    assertEquals(null, abr1.getStraddledContour(abr2));
+    assertEquals(null, abr2.getStraddledContour(abr1));
 
-	// remove a contour from abr2
-	AbstractCurve ac = in_set.first();
-	abr2 = abr2.moveOutside(ac);
+    // remove a contour from abr2
+    AbstractCurve ac = in_set.first();
+    abr2 = abr2.moveOutside(ac);
 
-	assertEquals(ac, abr1.getStraddledContour(abr2));
-	assertEquals(ac, abr2.getStraddledContour(abr1));
+    assertEquals(ac, abr1.getStraddledContour(abr2));
+    assertEquals(ac, abr2.getStraddledContour(abr1));
 
-	// remove another contour from abr2
-	ac = in_set.last();
-	abr2 = abr2.moveOutside(ac);
-       	assertEquals(null, abr1.getStraddledContour(abr2));
-	assertEquals(null, abr2.getStraddledContour(abr1));
+    // remove another contour from abr2
+    ac = in_set.last();
+    abr2 = abr2.moveOutside(ac);
+        assertEquals(null, abr1.getStraddledContour(abr2));
+    assertEquals(null, abr2.getStraddledContour(abr1));
     }
 
     @Test
     @Configuration(tests=100, size=20) //limit the AbstractCurve[] to be lower than 20 elements 
     @Generator(klass=AbstractCurve.class, generator=CustomAbstractCurveGen.class)
     public void testIsLabelEquivalent(AbstractCurve[] acs) {
-	// Again, need at least one curve
+    // Again, need at least one curve
         if(0 == acs.length) {
-	    assertTrue(true);
-	    return;
+        assertTrue(true);
+        return;
         }
 
         TreeSet<AbstractCurve> in_set = new TreeSet<AbstractCurve>();
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr1 = AbstractBasicRegion.get(in_set);
 
         for(AbstractCurve ac : acs) {
-	    in_set.add(ac);
+        in_set.add(ac);
         }
 
         AbstractBasicRegion abr2 = AbstractBasicRegion.get(in_set);
 
-	assertTrue(abr1.isLabelEquivalent(abr2));
+    assertTrue(abr1.isLabelEquivalent(abr2));
 
-	AbstractCurve first = in_set.first();
-	assertFalse(abr1.moveOutside(first).isLabelEquivalent(abr2));
-	assertFalse(abr1.isLabelEquivalent(abr2.moveOutside(first)));
+    AbstractCurve first = in_set.first();
+    assertFalse(abr1.moveOutside(first).isLabelEquivalent(abr2));
+    assertFalse(abr1.isLabelEquivalent(abr2.moveOutside(first)));
     }
     
     @Test
     public void testABREquivalence () {
-    	CurveLabel    a  = CurveLabel.get("a");
-    	AbstractCurve a1 = new AbstractCurve(a);
-    	AbstractCurve a2 = new AbstractCurve(a);
-    	
-    	Set<AbstractCurve> sa1 = new TreeSet<AbstractCurve>();
-    	sa1.add(a1);
-    	Set<AbstractCurve> sa2 = new TreeSet<AbstractCurve>();
-    	sa1.add(a2);
-    	
-    	AbstractBasicRegion abr1 = AbstractBasicRegion.get(sa1);
-    	AbstractBasicRegion abr2 = AbstractBasicRegion.get(sa2);
+        CurveLabel    a  = CurveLabel.get("a");
+        AbstractCurve a1 = new AbstractCurve(a);
+        AbstractCurve a2 = new AbstractCurve(a);
+        
+        Set<AbstractCurve> sa1 = new TreeSet<AbstractCurve>();
+        sa1.add(a1);
+        Set<AbstractCurve> sa2 = new TreeSet<AbstractCurve>();
+        sa1.add(a2);
+        
+        AbstractBasicRegion abr1 = AbstractBasicRegion.get(sa1);
+        AbstractBasicRegion abr2 = AbstractBasicRegion.get(sa2);
 
-    	
-    	// Reference equality
-    	assertTrue(abr1 != abr2);
-    	
-    	// Deep equality
-    	assertThat(abr1, is(not(abr2)));
+        
+        // Reference equality
+        assertTrue(abr1 != abr2);
+        
+        // Deep equality
+        assertThat(abr1, is(not(abr2)));
 
     }
 }

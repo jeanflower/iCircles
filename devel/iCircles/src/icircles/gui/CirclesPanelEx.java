@@ -512,16 +512,16 @@ public class CirclesPanelEx extends JPanel {
     // </editor-fold>
 
     protected Graphics getComponentGraphics(Graphics g) {
-	// Get a DOMImplementation.
+    // Get a DOMImplementation.
         DOMImplementation domImpl =
             GenericDOMImplementation.getDOMImplementation();
 
-	// Create an instance of org.w3c.dom.Document.
+    // Create an instance of org.w3c.dom.Document.
         String svgNS = "http://www.w3.org/2000/svg";
         Document document = domImpl.createDocument(svgNS, "svg", null);
 
         // Create an instance of the SVG Generator.
         SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-	return svgGenerator;
+    return svgGenerator;
     }
 }

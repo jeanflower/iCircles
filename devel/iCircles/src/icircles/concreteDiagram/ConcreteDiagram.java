@@ -53,7 +53,7 @@ public class ConcreteDiagram {
             CircleContour c = cIt.next();
             if (DEB.level >= 2) {
                 System.out.println("build checksum for contour at coords (" + c.cx 
-                		       + ", " + c.cy + ") radius "+ c.radius +"\n");
+                               + ", " + c.cy + ") radius "+ c.radius +"\n");
             }
             result += c.cx * 0.345 + c.cy * 0.456 + c.radius * 0.567 + c.ac.checksum() * 0.555;
             result *= 1.2;

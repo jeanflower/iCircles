@@ -153,7 +153,7 @@ public class DiagramCreator {
         
         if(Math.abs(se_x) < 0.001 && Math.abs(se_y) > 0.001)
         {
-        	sf_prop_leg = sf_proj_leg_y / se_y;
+            sf_prop_leg = sf_proj_leg_y / se_y;
         }
         if (DEB.level >= 3) {
             System.out.println("sf_perp_leg_len = "+sf_perp_leg_len +", sf_prop_leg = "+sf_prop_leg);
@@ -288,15 +288,15 @@ public class DiagramCreator {
         while(check_feet_placements){
         check_feet_placements = false;
         for (ConcreteSpider cs : spiders) {
-        	if(check_feet_placements)//(start again)
-        		break;
+            if(check_feet_placements)//(start again)
+                break;
             for (ConcreteSpiderFoot foot : cs.feet) {
                 // check whether foot is too close to another leg
-            	if(check_feet_placements)//(start again)
-            		break;
+                if(check_feet_placements)//(start again)
+                    break;
                 for (ConcreteSpider cs2 : spiders) {
-                	if(check_feet_placements)//(start again)
-                		break;
+                    if(check_feet_placements)//(start again)
+                        break;
                     for (ConcreteSpiderLeg leg : cs2.legs) {
                         if (leg.from == foot || leg.to == foot) {
                             // this leg is bound to be close to foot -it's attached!
@@ -319,18 +319,18 @@ public class DiagramCreator {
                             Area a = new Area(cz.getShape(box));
                             
                             double new_y = old_y + 5 * tol;
-//    	                    double new_x = old_x + 2 * tol;
+//                          double new_x = old_x + 2 * tol;
                             double new_x = old_x;
                             CircleContour test = new CircleContour(new_x, new_y, tol, null);
                             if (containedIn(test, a)) {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
                             new_x = old_x - 5 * tol;
@@ -340,11 +340,11 @@ public class DiagramCreator {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
                             new_x = old_x + 5 * tol;
@@ -354,11 +354,11 @@ public class DiagramCreator {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
                             new_x = old_x - 5 * tol;
@@ -368,11 +368,11 @@ public class DiagramCreator {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
                         }
@@ -1500,7 +1500,7 @@ public class DiagramCreator {
                 circles_copy, shadedZones, unshadedZones, spiders);
         CirclesPanel cp = new CirclesPanel("debug frame " + debug_frame_index, "no failure",
                 cd, true);
-        	
+            
         DEB.addFilmStripShot(cp);
     }
 }

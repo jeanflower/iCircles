@@ -105,7 +105,7 @@ public class CommandLineUI {
             // Pull in the AbstractDescription from JSON file
             ObjectMapper mapper = new ObjectMapper();
             try {
-            	AbstractDiagram sad = mapper.readValue(new File(jsonFile), AbstractDiagram.class);
+                AbstractDiagram sad = mapper.readValue(new File(jsonFile), AbstractDiagram.class);
                 this.abstractDescription  = sad.toAbstractDescription();
             } catch (Exception ex) { // IOException or IllegalArgumentException
                 ex.printStackTrace();

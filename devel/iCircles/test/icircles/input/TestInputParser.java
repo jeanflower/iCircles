@@ -142,7 +142,7 @@ public class TestInputParser {
         } catch (JsonMappingException jme) {
             fail("Creation of diagram from JSON string failed, string = " + d);
         } catch (Exception e) {
-        	fail();
+            fail();
         }
 
         assertNotNull(ad);

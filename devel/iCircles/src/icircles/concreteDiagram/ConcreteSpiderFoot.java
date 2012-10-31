@@ -37,7 +37,7 @@ public class ConcreteSpiderFoot {
     public double checksum() {
         if (DEB.level >= 2) {
             System.out.println("build checksum for foot from coords (" + getX() 
-            		       + ", " + getY() + ")\n");
+                           + ", " + getY() + ")\n");
         }
         return getX() + 1.02 * getY();
     }

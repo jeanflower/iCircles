@@ -71,32 +71,32 @@ public class AbstractDescription {
     ArrayList<AbstractSpider> m_spiders;
     
     public AbstractDescription(Set<AbstractCurve> contours,
-		       Set<AbstractBasicRegion> zones,
-		       Set<AbstractBasicRegion> shaded_zones,
-		       Set<AbstractSpider> spiders) {
-    	this(contours, zones, shaded_zones);
-    	m_spiders = new ArrayList<AbstractSpider>(spiders);
+               Set<AbstractBasicRegion> zones,
+               Set<AbstractBasicRegion> shaded_zones,
+               Set<AbstractSpider> spiders) {
+        this(contours, zones, shaded_zones);
+        m_spiders = new ArrayList<AbstractSpider>(spiders);
     }
     
     public AbstractDescription(Set<AbstractCurve> contours,
-			       Set<AbstractBasicRegion> zones,
-			       Set<AbstractBasicRegion> shaded_zones) {
-    	this(contours, zones);
+                   Set<AbstractBasicRegion> zones,
+                   Set<AbstractBasicRegion> shaded_zones) {
+        this(contours, zones);
         m_shaded_zones = new TreeSet<AbstractBasicRegion>(shaded_zones);
         m_spiders = new ArrayList<AbstractSpider>();
     }
 
     public AbstractDescription(Set<AbstractCurve> contours,
-			       Set<AbstractBasicRegion> zones) {
-		m_contours = new TreeSet<AbstractCurve>(contours);
-		m_zones = new TreeSet<AbstractBasicRegion>(zones);
-		m_shaded_zones = new TreeSet<AbstractBasicRegion>();
+                   Set<AbstractBasicRegion> zones) {
+        m_contours = new TreeSet<AbstractCurve>(contours);
+        m_zones = new TreeSet<AbstractBasicRegion>(zones);
+        m_shaded_zones = new TreeSet<AbstractBasicRegion>();
         m_spiders = new ArrayList<AbstractSpider>();
-	}
+    }
 
     public void addSpider(AbstractSpider s){
-    	// TODO : check that feet are indeed AbstractBasicRegions of the diagram
-    	m_spiders.add(s);
+        // TODO : check that feet are indeed AbstractBasicRegions of the diagram
+        m_spiders.add(s);
     }
 
     public AbstractCurve getFirstContour() {
@@ -279,40 +279,40 @@ public class AbstractDescription {
     }
     
     public boolean hasShadedZone(AbstractBasicRegion z){
-    	return m_shaded_zones.contains(z);
+        return m_shaded_zones.contains(z);
     }
     
 public static AbstractDescription makeForTesting(String s, boolean random_shaded_zones) {
-    	
-    	ArrayList<String> descriptors = getDescriptors(s);
+        
+        ArrayList<String> descriptors = getDescriptors(s);
         String diagString = descriptors.get(0);
         String shadingString = descriptors.get(1);
         
         descriptors.remove(0);
         descriptors.remove(0);
         ArrayList<String> spiderStrings = descriptors;
-    	
+        
         TreeSet<AbstractBasicRegion> ad_zones = new TreeSet<AbstractBasicRegion>();
         AbstractBasicRegion outsideZone = AbstractBasicRegion.get(new TreeSet<AbstractCurve>());
         ad_zones.add(outsideZone);
         HashMap<CurveLabel, AbstractCurve> contours = new HashMap<CurveLabel, AbstractCurve>();
         if(diagString != null)
         {
-	        StringTokenizer st = new StringTokenizer(diagString); // for spaces
-	        while (st.hasMoreTokens()) {
-	            String word = st.nextToken();
-	            TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
-	            for (int i = 0; i < word.length(); i++) {
-	                String character = "" + word.charAt(i);
-	                CurveLabel cl = CurveLabel.get(character);
-	                if (!contours.containsKey(cl)) {
-	                    contours.put(cl, new AbstractCurve(cl));
-	                }
-	                zoneContours.add(contours.get(cl));
-	            }
-	            AbstractBasicRegion thisZone = AbstractBasicRegion.get(zoneContours);
-	            ad_zones.add(thisZone);
-	        }
+            StringTokenizer st = new StringTokenizer(diagString); // for spaces
+            while (st.hasMoreTokens()) {
+                String word = st.nextToken();
+                TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
+                for (int i = 0; i < word.length(); i++) {
+                    String character = "" + word.charAt(i);
+                    CurveLabel cl = CurveLabel.get(character);
+                    if (!contours.containsKey(cl)) {
+                        contours.put(cl, new AbstractCurve(cl));
+                    }
+                    zoneContours.add(contours.get(cl));
+                }
+                AbstractBasicRegion thisZone = AbstractBasicRegion.get(zoneContours);
+                ad_zones.add(thisZone);
+            }
         }
         TreeSet<AbstractCurve> ad_contours = new TreeSet<AbstractCurve>(contours.values());
         
@@ -320,91 +320,91 @@ public static AbstractDescription makeForTesting(String s, boolean random_shaded
         TreeSet<AbstractBasicRegion> ad_shaded_zones = new TreeSet<AbstractBasicRegion>();
         if(random_shaded_zones)
         {
-        	Random r = new Random();
-	        for(AbstractBasicRegion abr: ad_zones)
-	        {
-	        	if(random_shaded_zones)
-	        	{
-	        		if(r.nextBoolean())
-	        			ad_shaded_zones.add(abr);
-	        	}
-	        }
+            Random r = new Random();
+            for(AbstractBasicRegion abr: ad_zones)
+            {
+                if(random_shaded_zones)
+                {
+                    if(r.nextBoolean())
+                        ad_shaded_zones.add(abr);
+                }
+            }
         }
         else if(shadingString != null)
         {
-        	StringTokenizer st = new StringTokenizer(shadingString); // for spaces
+            StringTokenizer st = new StringTokenizer(shadingString); // for spaces
             while (st.hasMoreTokens()) {
                 String word = st.nextToken();
                 AbstractBasicRegion thisZone = null;
                 if(word.equals("."))
                 {
-                	// this means the outside zone
-                	thisZone = outsideZone;
+                    // this means the outside zone
+                    thisZone = outsideZone;
                 }
                 else
                 {
-	                TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
-	                for (int i = 0; i < word.length(); i++) {
-	                    String character = "" + word.charAt(i);
-	                    CurveLabel cl = CurveLabel.get(character);
-	                    AbstractCurve ac = contours.get(cl);
-	                    if(ac == null)
-	                    	throw new RuntimeException("malformed diagram spec : contour "+ac+"\n");
-	                    zoneContours.add(ac);
-	                }
-	                thisZone = AbstractBasicRegion.get(zoneContours);
+                    TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
+                    for (int i = 0; i < word.length(); i++) {
+                        String character = "" + word.charAt(i);
+                        CurveLabel cl = CurveLabel.get(character);
+                        AbstractCurve ac = contours.get(cl);
+                        if(ac == null)
+                            throw new RuntimeException("malformed diagram spec : contour "+ac+"\n");
+                        zoneContours.add(ac);
+                    }
+                    thisZone = AbstractBasicRegion.get(zoneContours);
                 }
                 if(!ad_zones.contains(thisZone))
                 {
-                	throw new RuntimeException("malformed diagram spec : zone "+thisZone+"\n");
+                    throw new RuntimeException("malformed diagram spec : zone "+thisZone+"\n");
                 }
                 ad_shaded_zones.add(thisZone);
-            }        	
+            }           
         }
         AbstractDescription result = new AbstractDescription(ad_contours, ad_zones, ad_shaded_zones);
         
         // add some Spiders
         for(String spiderString: spiderStrings)
         {
-        	StringTokenizer st = new StringTokenizer(spiderString); // for spaces
-        	TreeSet<AbstractBasicRegion> habitat = new TreeSet<AbstractBasicRegion>();
-        	String spiderLabel = null;
+            StringTokenizer st = new StringTokenizer(spiderString); // for spaces
+            TreeSet<AbstractBasicRegion> habitat = new TreeSet<AbstractBasicRegion>();
+            String spiderLabel = null;
             while (st.hasMoreTokens()) {
                 String word = st.nextToken();
                 AbstractBasicRegion thisZone = null;
                 if(word.charAt(0) == '\'')
                 {
-                	// this string represents the spider's label
-                	String name = word.substring(1);
-                	spiderLabel = name;
-                	continue;
+                    // this string represents the spider's label
+                    String name = word.substring(1);
+                    spiderLabel = name;
+                    continue;
                 }
                 else if(word.equals("."))
                 {
-                	// this means the outside zone
-                	thisZone = outsideZone;
+                    // this means the outside zone
+                    thisZone = outsideZone;
                 }
                 else
                 {
-	                TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
-	                for (int i = 0; i < word.length(); i++) {
-	                    String character = "" + word.charAt(i);
-	                    CurveLabel cl = CurveLabel.get(character);
-	                    AbstractCurve ac = contours.get(cl);
-	                    if(ac == null)
-	                    	throw new RuntimeException("malformed diagram spec : contour "+ac+"\n");
-	                    zoneContours.add(ac);
-	                }
-	                thisZone = AbstractBasicRegion.get(zoneContours);
+                    TreeSet<AbstractCurve> zoneContours = new TreeSet<AbstractCurve>();
+                    for (int i = 0; i < word.length(); i++) {
+                        String character = "" + word.charAt(i);
+                        CurveLabel cl = CurveLabel.get(character);
+                        AbstractCurve ac = contours.get(cl);
+                        if(ac == null)
+                            throw new RuntimeException("malformed diagram spec : contour "+ac+"\n");
+                        zoneContours.add(ac);
+                    }
+                    thisZone = AbstractBasicRegion.get(zoneContours);
                 }
                 if(!ad_zones.contains(thisZone))
                 {
-                	throw new RuntimeException("malformed diagram spec : zone "+thisZone+"\n");
+                    throw new RuntimeException("malformed diagram spec : zone "+thisZone+"\n");
                 }
                 habitat.add(thisZone);
-            }        	
+            }           
             AbstractSpider spider = new AbstractSpider(habitat, spiderLabel);
-            result.addSpider(spider);        	
+            result.addSpider(spider);           
         }
                 
         return result;
@@ -412,68 +412,68 @@ public static AbstractDescription makeForTesting(String s, boolean random_shaded
 
     private static ArrayList<String> getDescriptors(String input_s)
     {
-    	ArrayList<String> strings = new ArrayList<String>();
-    	strings.add(""); // diagram zones
-    	strings.add(""); // shaded zones
-    	// any more are spider descriptions
-    	
+        ArrayList<String> strings = new ArrayList<String>();
+        strings.add(""); // diagram zones
+        strings.add(""); // shaded zones
+        // any more are spider descriptions
+        
         StringTokenizer st = new StringTokenizer(input_s, ",", true); // split by commas, return commas as tokens
-    	if(!st.hasMoreTokens())
-    		return strings;
-    	String s = st.nextToken();
-    	if(!s.equals(","))
-    	{
-    		strings.set(0,s);
-        	if(!st.hasMoreTokens())
-        		return strings;
-    		s = st.nextToken();
-    	}
-    	if(!st.hasMoreTokens())
-    		return strings;
-    	s = st.nextToken();
-    	if(!s.equals(","))
-    	{
-    		strings.set(1,s);
-        	if(!st.hasMoreTokens())
-        		return strings;
-    		s = st.nextToken();
-    	}
-    	while(true)
-    	{
-	    	if(!st.hasMoreTokens())
-	    		return strings;
-	    	s = st.nextToken();
-	    	if(!s.equals(","))
-	    	{
-	    		strings.add(s);
-	        	if(!st.hasMoreTokens())
-	        		return strings;
-	    		s = st.nextToken();
-	    	}
-    	}
+        if(!st.hasMoreTokens())
+            return strings;
+        String s = st.nextToken();
+        if(!s.equals(","))
+        {
+            strings.set(0,s);
+            if(!st.hasMoreTokens())
+                return strings;
+            s = st.nextToken();
+        }
+        if(!st.hasMoreTokens())
+            return strings;
+        s = st.nextToken();
+        if(!s.equals(","))
+        {
+            strings.set(1,s);
+            if(!st.hasMoreTokens())
+                return strings;
+            s = st.nextToken();
+        }
+        while(true)
+        {
+            if(!st.hasMoreTokens())
+                return strings;
+            s = st.nextToken();
+            if(!s.equals(","))
+            {
+                strings.add(s);
+                if(!st.hasMoreTokens())
+                    return strings;
+                s = st.nextToken();
+            }
+        }
     }
 
     public String makeForTesting(){
-    	StringBuilder b = new StringBuilder();
-    	for(AbstractBasicRegion zone : m_zones){
-    		if(!zone.m_in_set.isEmpty()){ // don't journal out "." for empty zone - it's assumed
-    		    b.append(zone.journalString());
-    		    b.append(" ");
-    		}
-    	}
-    	b.append(", ");
-    	for(AbstractBasicRegion zone : m_shaded_zones){
-    		b.append(zone.journalString());
-    		b.append(" ");
-    	}
-    	for(AbstractSpider s : m_spiders){
-    		b.append(", ");
-    		b.append(s.journalString());
-    	}
-    	return b.toString();
+        StringBuilder b = new StringBuilder();
+        for(AbstractBasicRegion zone : m_zones){
+            if(!zone.m_in_set.isEmpty()){ // don't journal out "." for empty zone - it's assumed
+                b.append(zone.journalString());
+                b.append(" ");
+            }
+        }
+        b.append(", ");
+        for(AbstractBasicRegion zone : m_shaded_zones){
+            b.append(zone.journalString());
+            b.append(" ");
+        }
+        for(AbstractSpider s : m_spiders){
+            b.append(", ");
+            b.append(s.journalString());
+        }
+        return b.toString();
     }
 
     public static AbstractDescription makeForTesting(String s) {
-    	return makeForTesting(s, false);
+        return makeForTesting(s, false);
     }
 }

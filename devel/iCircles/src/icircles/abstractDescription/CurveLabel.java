@@ -82,10 +82,10 @@ public class CurveLabel implements Comparable<CurveLabel> {
         {
             return m_label;
         }
-//		else
-//		{
-//			return m_label + "@"+ hashCode();
-//		}
+//      else
+//      {
+//          return m_label + "@"+ hashCode();
+//      }
 
     }
 

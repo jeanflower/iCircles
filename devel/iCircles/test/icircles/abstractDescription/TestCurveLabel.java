@@ -24,19 +24,19 @@ public class TestCurveLabel {
     @Test
     @Configuration(tests=100)
     public void testGetReturnsSameObject(String s1) {
-	CurveLabel c1 = CurveLabel.get (s1);
-	CurveLabel c2 = CurveLabel.get (s1);
+    CurveLabel c1 = CurveLabel.get (s1);
+    CurveLabel c2 = CurveLabel.get (s1);
 
-	// Check reference equality
-	assertTrue(c1 == c2);
+    // Check reference equality
+    assertTrue(c1 == c2);
     }
 
     @Test
     @Configuration(tests=100)
     public void testChecksum (String s1, String s2) {
-	CurveLabel c1 = CurveLabel.get(s1);
-	CurveLabel c2 = CurveLabel.get(s2);
+    CurveLabel c1 = CurveLabel.get(s1);
+    CurveLabel c2 = CurveLabel.get(s2);
 
-	assertTrue(c1.checksum() != c2.checksum());
+    assertTrue(c1.checksum() != c2.checksum());
     }
 }

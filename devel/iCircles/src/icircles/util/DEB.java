@@ -20,31 +20,31 @@ public class DEB {
     private static ArrayList<CirclesPanel> filmStripShots = new ArrayList<CirclesPanel>();
     public static void addFilmStripShot(CirclesPanel cp)
     {
-		filmStripShots.add(cp);
+        filmStripShots.add(cp);
     }
     public static void showFilmStrip()
     {
-    	if(filmStripShots.size()==0)
-    		return;
-    	
-    	JFrame viewingFrame = new JFrame("filmstrip");
-    	JPanel filmPanel = new JPanel();
-    	filmPanel.setLayout(new FlowLayout());
-    	for(CirclesPanel cp : filmStripShots)
-    	{
-    		filmPanel.add(cp);
-    	}
+        if(filmStripShots.size()==0)
+            return;
+        
+        JFrame viewingFrame = new JFrame("filmstrip");
+        JPanel filmPanel = new JPanel();
+        filmPanel.setLayout(new FlowLayout());
+        for(CirclesPanel cp : filmStripShots)
+        {
+            filmPanel.add(cp);
+        }
 
-    	JScrollPane scrollPane = new JScrollPane(filmPanel);
-    	viewingFrame.getContentPane().add(scrollPane);
-    	
-    	viewingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	viewingFrame.pack();
-    	viewingFrame.setVisible(true);    	
+        JScrollPane scrollPane = new JScrollPane(filmPanel);
+        viewingFrame.getContentPane().add(scrollPane);
+        
+        viewingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewingFrame.pack();
+        viewingFrame.setVisible(true);      
     }
     public void clearFilmStrip()
     {
-    	filmStripShots.clear();
+        filmStripShots.clear();
     }
     
     public static void assertCondition(boolean condition, String messageIfFail) {
@@ -61,9 +61,9 @@ public class DEB {
     }
 
     public static void show(int this_level, Shape s, String desc) {
-    	if(this_level > level)
-    		return;
-    	
+        if(this_level > level)
+            return;
+        
         JFrame jf = new JFrame(desc);
         jf.getContentPane().add(new ShapePanel(s));
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

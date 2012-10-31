@@ -8,7 +8,7 @@ public class TestDatum {
     public double expected_checksum;
 
     public TestDatum(String string, 
-    		//int decomp_strategy,
+            //int decomp_strategy,
             //int recomp_strategy, 
             double checksum) {
         description = string;

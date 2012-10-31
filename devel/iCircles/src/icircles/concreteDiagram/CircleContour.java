@@ -41,15 +41,15 @@ public class CircleContour {
     }
 
     public CircleContour(CircleContour c) {
-		this.cx = c.cx;
-		this.cy = c.cy;
-		this.radius = c.radius;
-		this.ac = c.ac;
-		circle = makeEllipse(cx, cy, radius);
-		this.col = c.col;
-	}
+        this.cx = c.cx;
+        this.cy = c.cy;
+        this.radius = c.radius;
+        this.ac = c.ac;
+        circle = makeEllipse(cx, cy, radius);
+        this.col = c.col;
+    }
 
-	public void shift(double x, double y) {
+    public void shift(double x, double y) {
         cx += x;
         cy += y;
         circle = makeEllipse(cx, cy, radius);
@@ -165,9 +165,9 @@ public class CircleContour {
     }
     static Rectangle2D.Double makeBigOuterBox(ArrayList<CircleContour> circles)
     {
-    	if(circles.size()==0)
-    		return new Rectangle2D.Double(0, 0, 1000, 1000);
-    	
+        if(circles.size()==0)
+            return new Rectangle2D.Double(0, 0, 1000, 1000);
+        
         // work out a suitable size
         int minX = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
@@ -193,30 +193,30 @@ public class CircleContour {
         return new Rectangle2D.Double((int)(minX - 2*width), (int)(minY - 2*height), 5*width, 5*height);
     }
 
-	public Color color() {
-		return col;
-	}
+    public Color color() {
+        return col;
+    }
 
-	public void setColor(Color color) {
-		col = color;
-	}
+    public void setColor(Color color) {
+        col = color;
+    }
 
-	public double get_cx() {
-		return cx;
-	}
+    public double get_cx() {
+        return cx;
+    }
 
-	public double get_cy() {
-		return cy;
-	}
+    public double get_cy() {
+        return cy;
+    }
 
-	public double get_radius() {
-		return radius;
-	}
+    public double get_radius() {
+        return radius;
+    }
 
-	public void setStroke(Stroke s) {
-		stroke = s;
-	}
-	public Stroke stroke() {
-		return stroke;
-	}
+    public void setStroke(Stroke s) {
+        stroke = s;
+    }
+    public Stroke stroke() {
+        return stroke;
+    }
 }
