@@ -57,85 +57,85 @@ public class TestAbstractDescription {
     public void testADSystemTests()
     {
 
-    CurveLabel a = CurveLabel.get("a");
-    CurveLabel a2 = CurveLabel.get("a");
+        CurveLabel a = CurveLabel.get("a");
+        CurveLabel a2 = CurveLabel.get("a");
 
-    /*
-     * Debug.level = 2;
-     * System.out.println("contour labels equal? "+a.debug()+","+a2.debug());
-     * System.out.println("contour labels equal? "+(a==a2));
-     *
-     * replaced by
-     */
-    assertEquals(a, a2);
-
-
-    AbstractCurve ca1 = new AbstractCurve(a);
-    AbstractCurve ca2 = new AbstractCurve(a);
-
-    /*
-     * System.out.println("contours equal? "+a.debug()+","+a2.debug());
-     * System.out.println("contours equal? "+(a==a2));
-     *
-     * replaced by
-     */
-    // should not be equal as their internal curve id differs
-    assertThat(ca1, is(not(ca2)));
-
-    TreeSet<AbstractCurve> ts = new TreeSet<AbstractCurve>();
-    AbstractBasicRegion z0 = AbstractBasicRegion.get(ts);
-
-    /*
-     * System.out.println("outside zone "+z0.debug());
-     *
-     * replaced by
-     */
-    // break private scope of AbstractBasicRegion constructor for this test
-    try {
-        Constructor<AbstractBasicRegion> constructor = AbstractBasicRegion.class.getDeclaredConstructor(new Class[0]);
-        constructor.setAccessible(true);
-        AbstractBasicRegion abc = constructor.newInstance(ts);
-        assertEquals(abc, z0);
-    } catch (Exception e) {
-        // do nothing
-    }
-
-    ts.add(ca1);
-    AbstractBasicRegion za = AbstractBasicRegion.get(ts);
-
-    AbstractBasicRegion za2;
-    {
-        TreeSet<AbstractCurve> ts2 = new TreeSet<AbstractCurve>();
-        ts2.add(ca2);
-        za2 = AbstractBasicRegion.get(ts2);
         /*
-         * System.out.println("za==za2 ?" + (za == za2));
+         * Debug.level = 2;
+         * System.out.println("contour labels equal? "+a.debug()+","+a2.debug());
+         * System.out.println("contour labels equal? "+(a==a2));
          *
          * replaced by
          */
-        assertThat(za, is(not(za2)));
-    }
+        assertEquals(a, a2);
 
-    CurveLabel b = CurveLabel.get("b");
-    AbstractCurve cb = new AbstractCurve(b);
-    ts.add(cb);
-    AbstractBasicRegion zab = AbstractBasicRegion.get(ts);
-    //System.out.println("zone in ab "+zab.debug());
 
-    ts.remove(ca1);
-    AbstractBasicRegion zb = AbstractBasicRegion.get(ts);
-    //System.out.println("zone in b "+zb.debug());
+        AbstractCurve ca1 = new AbstractCurve(a);
+        AbstractCurve ca2 = new AbstractCurve(a);
 
-    ts.add(ca1);
-    AbstractBasicRegion zab2 = AbstractBasicRegion.get(ts);
-    //System.out.println("zone2 in ab "+zab2.debug());
+        /*
+         * System.out.println("contours equal? "+a.debug()+","+a2.debug());
+         * System.out.println("contours equal? "+(a==a2));
+         *
+         * replaced by
+         */
+        // should not be equal as their internal curve id differs
+        assertThat(ca1, is(not(ca2)));
 
-    /*
-     * System.out.println("zab==zab2 ?" + (zab == zab2));
-     *
-     * replaced by
-     */
-    assertEquals(zab, zab2);
+        TreeSet<AbstractCurve> ts = new TreeSet<AbstractCurve>();
+        AbstractBasicRegion z0 = AbstractBasicRegion.get(ts);
+
+        /*
+         * System.out.println("outside zone "+z0.debug());
+         *
+         * replaced by
+         */
+        // break private scope of AbstractBasicRegion constructor for this test
+        try {
+            Constructor<AbstractBasicRegion> constructor = AbstractBasicRegion.class.getDeclaredConstructor(new Class[0]);
+            constructor.setAccessible(true);
+            AbstractBasicRegion abc = constructor.newInstance(ts);
+            assertEquals(abc, z0);
+        } catch (Exception e) {
+            // do nothing
+        }
+
+        ts.add(ca1);
+        AbstractBasicRegion za = AbstractBasicRegion.get(ts);
+
+        AbstractBasicRegion za2;
+        {
+            TreeSet<AbstractCurve> ts2 = new TreeSet<AbstractCurve>();
+            ts2.add(ca2);
+            za2 = AbstractBasicRegion.get(ts2);
+            /*
+             * System.out.println("za==za2 ?" + (za == za2));
+             *
+             * replaced by
+             */
+            assertThat(za, is(not(za2)));
+        }
+
+        CurveLabel b = CurveLabel.get("b");
+        AbstractCurve cb = new AbstractCurve(b);
+        ts.add(cb);
+        AbstractBasicRegion zab = AbstractBasicRegion.get(ts);
+        //System.out.println("zone in ab "+zab.debug());
+
+        ts.remove(ca1);
+        AbstractBasicRegion zb = AbstractBasicRegion.get(ts);
+        //System.out.println("zone in b "+zb.debug());
+
+        ts.add(ca1);
+        AbstractBasicRegion zab2 = AbstractBasicRegion.get(ts);
+        //System.out.println("zone2 in ab "+zab2.debug());
+
+        /*
+         * System.out.println("zab==zab2 ?" + (zab == zab2));
+         *
+         * replaced by
+         */
+        assertEquals(zab, zab2);
     }
     /*
     // The following pre-existing system tests have not been reformulated in
@@ -193,6 +193,6 @@ public class TestAbstractDescription {
     Set<AbstractBasicRegion> m_shaded_zones;
 
 
-   
-    */
+
+     */
 }
