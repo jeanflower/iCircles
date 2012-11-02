@@ -25,11 +25,15 @@ Build, test, run and package iCricles.
 	<include name="jackson-annotations-2.1.0.jar" />
 	<include name="jackson-databind-2.1.0.jar" />
 	<include name="commons-cli-1.2.jar" />
+        <!-- TODO: move commons-lang3 to classpath.test -->
+        <include name="commons-lang3-3.1.jar"/>
       </fileset>
     </path>
 
     <path id="classpath.test">
       <fileset dir="${lib}">
+        <!-- Pull in Hamcrest, before JUnit -->
+        <include name="hamcrest-all-1.3.jar"/>
 	<!-- Pull in JUnit -->
 	<include name="junit4.jar"/>
 	<!-- Ensure ant has the JUnit taskdef -->
