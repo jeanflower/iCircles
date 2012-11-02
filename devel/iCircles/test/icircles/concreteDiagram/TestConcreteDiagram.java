@@ -21,7 +21,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.*;
+
 
 import icircles.abstractDescription.*;
 import icircles.concreteDiagram.*;
@@ -45,7 +46,7 @@ public class TestConcreteDiagram {
     public class DiagramCollector extends TestWatcher {
         @Override
         protected void failed(Throwable e, Description description) {
-            // draw failed diagram unless it cannot be drawn
+            // draw failed diagram unless it cimport static org.hamcrest.Matchers.*;annot be drawn
             if(null != currentDiagram) {
                 CirclesSVGGenerator csg = new CirclesSVGGenerator(currentDiagram);
                 
@@ -82,8 +83,8 @@ public class TestConcreteDiagram {
          // To get a range, do this...there's too much plumbing in implementing
          // a range Iterator type.
          //for(int i = 0; i <= 200; i++)
-         for(TestDatum td : TestData.test_data) {
-             v.add(new TestDatum[]{td});
+         for(TestDatum td : icircles.test.TestData.test_data) {
+             v.add(new TestDatum[]{ new TestDatum(td.toJSON(), td.expected_checksum)});
          }
        return v;
      }
@@ -105,7 +106,7 @@ public class TestConcreteDiagram {
         // to record all errors.  We'll deal with them later.
         try {
             currentDiagram = dc.createDiagram(diagramSize);
-            collector.checkThat("checksum", datum.expected_checksum, is(currentDiagram.checksum()));
+            collector.checkThat("checksum", datum.expected_checksum, closeTo(currentDiagram.checksum(), 0.00001));
         } catch (CannotDrawException cde) {
             // The expected result of a CannotDrawException is hardcoded as 0.0
             collector.checkThat("checksum", datum.expected_checksum, is(0.0));
