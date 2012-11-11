@@ -20,7 +20,7 @@ import icircles.concreteDiagram.*;
 
 public class CirclesSVGGenerator {
 
-    static enum zOrder {SHADING, CONTOUR, LABEL};
+    static enum zOrder {SHADING, CONTOUR, LABEL, SPIDER};
 
     private ConcreteDiagram diagram;
 
@@ -108,6 +108,35 @@ public class CirclesSVGGenerator {
             svgRoot.appendChild(text);
         }
 
+        for(ConcreteSpider cs : diagram.getSpiders()) {
+            for(ConcreteSpiderFoot f : cs.feet) {
+                // Draw the foot
+                Element circle = document.createElementNS(svgNS, "circle");
+                circle.setAttributeNS(null, "cx", Double.toString(f.getX()));
+                circle.setAttributeNS(null, "cy", Double.toString(f.getY()));
+                circle.setAttributeNS(null, "r", Double.toString(f.FOOT_RADIUS));
+                circle.setAttributeNS(null, "z-index", Integer.toString(zOrder.SPIDER.ordinal()));
+
+                circle.setAttributeNS(null, "stroke", "black");
+                circle.setAttributeNS(null, "stroke-width", "2");
+                circle.setAttributeNS(null, "fill", "black");
+                svgRoot.appendChild(circle);
+            }
+
+            for(ConcreteSpiderLeg l : cs.legs) {
+                Element line = document.createElementNS(svgNS, "line");
+                line.setAttributeNS(null, "x1", Double.toString(l.from.getX()));
+                line.setAttributeNS(null, "y1", Double.toString(l.from.getY()));
+                line.setAttributeNS(null, "x2", Double.toString(l.to.getX()));
+                line.setAttributeNS(null, "y2", Double.toString(l.to.getY()));
+                line.setAttributeNS(null, "z-index", Integer.toString(zOrder.SPIDER.ordinal()));
+
+                line.setAttributeNS(null, "stroke", "black");
+                line.setAttributeNS(null, "stroke-width", "2");
+                line.setAttributeNS(null, "fill", "black");
+                svgRoot.appendChild(line);
+            }
+        }
         return document;
     }
 
