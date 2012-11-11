@@ -1,4 +1,4 @@
-package icircles.test;
+package icircles.concreteDiagram;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -129,7 +129,7 @@ public class TestDatum {
         StringBuilder json = new StringBuilder("\"Spiders\":");
 
         // Use a List here as we can have many spiders with the same (name, habitat) pair
-        List<String> ss = new Vector();
+        List<String> ss = new Vector<String>();
         // Individuals are space separated zone descriptions
         String [] individuals = Pattern.compile(",").split(spiders);
         for(String s : individuals) {
@@ -156,7 +156,7 @@ public class TestDatum {
             }
             sp.append(", \"habitat\":");
 
-            HashSet<String> hs = new HashSet();
+            HashSet<String> hs = new HashSet<String>();
             for(String z : habitat) {
                 if(".".equals(z)) { //e outside zone
                     hs.add("{\"in\":[]}");

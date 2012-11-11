@@ -12,10 +12,10 @@ import icircles.recomposition.RecompData;
 import icircles.recomposition.Recomposer;
 import icircles.recomposition.RecompositionStep;
 import icircles.recomposition.RecompositionStrategy;
-import icircles.test.TestData;
 import icircles.util.CannotDrawException;
 import icircles.util.DEB;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -45,7 +45,8 @@ class AngleIterator {
 }
 
 public class DiagramCreator {
-
+    public static final Font font = new Font("Helvetica", Font.BOLD,  16);
+    
     AbstractDescription m_initial_diagram;
     final static int smallest_rad = 10;
     ArrayList<DecompositionStep> d_steps;
@@ -115,7 +116,7 @@ public class DiagramCreator {
 
         result = new ConcreteDiagram(new Rectangle2D.Double(0, 0, size, size),
                 circles, shadedZones, unshadedZones, spiders);
-        result.setFont(TestData.font);
+        result.setFont(font);
         DEB.showFilmStrip();
         }
         catch(CannotDrawException x)
