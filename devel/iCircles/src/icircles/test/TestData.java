@@ -249,7 +249,7 @@ public class TestData {
         /*127*/new TestDatum( "A B C AB AC BC ABC, B,A AB ABC, B, B", 0.0),
         /*127*/new TestDatum( "A B C AB AC BC ABC, B,A AB ABC, B, B", 0.0),
         /*128*/new TestDatum( ",", 0.0),
-        /*129*/new TestDatum( ",,", 0.0),
+        // Removed from test data as not it's invalid microsyntax /*129*/new TestDatum( ",,", 0.0),
         /*130*/new TestDatum( "a,,a .", 845.5434726364797),
         /*131*/new TestDatum( "a,.,a .,.", 1055.5206726364797),
         /*132*/new TestDatum( "a,.,a .,.,.,.", 2033.7907206364794),

@@ -82,7 +82,8 @@ public class TestConcreteDiagram {
 
          // To get a range, do this...there's too much plumbing in implementing
          // a range Iterator type.
-         //for(int i = 0; i <= 200; i++)
+         //for(int i = 176; i <= 176; i++) {
+         //    TestDatum td = icircles.test.TestData.test_data[i];
          for(TestDatum td : icircles.test.TestData.test_data) {
              v.add(new TestDatum[]{ new TestDatum(td.toJSON(), td.expected_checksum)});
          }

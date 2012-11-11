@@ -33,6 +33,7 @@ package icircles.abstractDescription;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -68,14 +69,14 @@ public class AbstractDescription {
     Set<AbstractBasicRegion> m_zones;
     Set<AbstractBasicRegion> m_shaded_zones;
 
-    ArrayList<AbstractSpider> m_spiders;
+    List<AbstractSpider> m_spiders;
     
     public AbstractDescription(Set<AbstractCurve> contours,
                Set<AbstractBasicRegion> zones,
                Set<AbstractBasicRegion> shaded_zones,
-               Set<AbstractSpider> spiders) {
+               List<AbstractSpider> spiders) {
         this(contours, zones, shaded_zones);
-        m_spiders = new ArrayList<AbstractSpider>(spiders);
+        m_spiders = spiders;
     }
     
     public AbstractDescription(Set<AbstractCurve> contours,

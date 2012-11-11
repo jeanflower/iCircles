@@ -24,7 +24,7 @@ public class Spider {
         for(Zone z : habitat) {
             feet.add(z.toAbstractBasicRegion(contours));
         }
-        
+
         return new AbstractSpider(feet, name);
     }
 
@@ -33,7 +33,13 @@ public class Spider {
     }
 
     public String toString() {
-        StringBuilder     builder = new StringBuilder("{\"name\" : \"" + name + "\", \"habitat\" : [");
+        StringBuilder     builder = new StringBuilder("{\"name\" : ");
+        if(null == name) {
+            builder.append("null"); // Deliberately unquoted JSON null object
+        } else {
+            builder.append("\"" + name + "\"");
+        }
+        builder.append(", \"habitat\" : [");
         Iterator <Zone>   iter    = habitat.iterator();
 
         while (iter.hasNext()) {

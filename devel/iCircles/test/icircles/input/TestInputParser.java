@@ -2,6 +2,7 @@ package icircles.input;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Vector;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -55,7 +56,7 @@ public class TestInputParser {
             fail();
         }
 
-        AbstractDiagram expected = new AbstractDiagram(0, new HashSet<String>(), new HashSet<Zone>(), new HashSet<Zone>(), new HashSet<Spider>());
+        AbstractDiagram expected = new AbstractDiagram(0, new HashSet<String>(), new HashSet<Zone>(), new HashSet<Zone>(), new Vector<Spider>());
         assertEquals(expected, ad);
     }
     

@@ -30,6 +30,8 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
+import icircles.input.Zone;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -84,6 +86,25 @@ public class AbstractSpider implements Comparable<AbstractSpider>{
         return 0;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals (Object obj) {
+        if (!(obj instanceof AbstractSpider))
+            return false;
+        return this.hashCode() == obj.hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode () {
+        return m_name.hashCode() + m_feet.hashCode();
+    }
     public String journalString() {
         StringBuilder b = new StringBuilder();
         for (AbstractBasicRegion z : m_feet) {

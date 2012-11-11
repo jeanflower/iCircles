@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class TestDatum {
 
@@ -98,9 +101,18 @@ public class TestDatum {
         // Build the zones as a set of strings of the form {"in": ["a","b"]}
         Set <String> zs          = new HashSet<String>();
         if(zones.contains(".")) {
-            zs.add("{\"in\": []}"); // outside zone
-            zones = zones.replaceAll(".", "");
+            zs.add("{\"in\":[]}"); // outside zone
+            zones = zones.replaceAll("\\.", ""); // Match a '.' char
         }
+
+        // if we do any further pattern matching on "", we'll end up with
+        // strange results.  i.e. the result of "".split(" ") is an array
+        // containing the empty string
+        if("".equals(zones)) {
+            json.append(collectionToJSONArray(zs, false));
+            return json;
+        }
+
         String []    individuals = Pattern.compile(" ").split(zones);
         for(String z : individuals) {
             StringBuilder sb = new StringBuilder("{\"in\":");
@@ -116,7 +128,51 @@ public class TestDatum {
     private StringBuilder getSpidersJSON(String spiders) {
         StringBuilder json = new StringBuilder("\"Spiders\":");
 
-        json.append("[]");
+        // Use a List here as we can have many spiders with the same (name, habitat) pair
+        List<String> ss = new Vector();
+        // Individuals are space separated zone descriptions
+        String [] individuals = Pattern.compile(",").split(spiders);
+        for(String s : individuals) {
+            // trim leading spaces
+            s = StringUtils.stripStart(s, " ");
+
+            StringBuilder sp = new StringBuilder();
+            String [] habitat = Pattern.compile(" ").split(s);
+
+            // if the last element in habitat begins with a single quote char,
+            // then it is the label for a spider.  Otherwise it is a zone
+            // description
+            sp.append("{\"name\":");
+            if('\'' == habitat[habitat.length - 1].charAt(0)) {
+                String label = habitat[habitat.length - 1].substring(1);
+                sp.append("\"" + label + "\""); // the label in quotes
+
+                // remove the label from the habitat arrary
+                // expensive :(
+                List<String> ls =Arrays.asList(habitat);
+                habitat = (ls.subList(0, ls.size() - 1)).toArray(new String[0]);
+            } else {
+                sp.append("null"); // the JSON null object (unquoted)
+            }
+            sp.append(", \"habitat\":");
+
+            HashSet<String> hs = new HashSet();
+            for(String z : habitat) {
+                if(".".equals(z)) { //e outside zone
+                    hs.add("{\"in\":[]}");
+                } else {
+                    StringBuilder sb = new StringBuilder("{\"in\":");
+                    sb.append(collectionToJSONArray(Arrays.asList(ArrayUtils.toObject(z.toCharArray()))));
+                    sb.append("}");
+                    hs.add(sb.toString());
+                }
+            }
+            sp.append(collectionToJSONArray(hs, false));
+            sp.append("}"); // close array of habitats and (name, habitat) object
+            ss.add(sp.toString());
+        }
+
+        json.append(collectionToJSONArray(ss, false));
         return json;
     }
 

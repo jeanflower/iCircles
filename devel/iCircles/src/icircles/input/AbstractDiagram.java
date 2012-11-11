@@ -5,6 +5,7 @@ import icircles.abstractDescription.*;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -15,15 +16,25 @@ public class AbstractDiagram {
     private Set<String> contours;
     private Set<Zone> zones;
     private Set<Zone> shadedZones;
-    private Set<Spider> spiders;
-    
+    private List<Spider> spiders;
+
+    /**
+     * Constructor used by Jackson to deserialise JSON to AbstractDiagram
+     * Contours, Zones and ShadedZones cannot contain duplicates, Spiders can. 
+     * @param version
+     * @param contours
+     * @param zones
+     * @param shadedZones
+     * @param spiders
+     * @throws IllegalArgumentException
+     */
     @JsonCreator
     public AbstractDiagram (
             @JsonProperty(value="Version")     int version,
             @JsonProperty(value="Contours")    Set<String> contours, 
             @JsonProperty(value="Zones")       Set<Zone> zones,
             @JsonProperty(value="ShadedZones") Set<Zone> shadedZones,
-            @JsonProperty(value="Spiders")     Set<Spider> spiders) throws IllegalArgumentException {
+            @JsonProperty(value="Spiders")     List<Spider> spiders) throws IllegalArgumentException {
         this.version     = version;
         this.contours    = contours;
         this.zones       = zones;
@@ -79,7 +90,7 @@ public class AbstractDiagram {
         Set<AbstractCurve>       cs  = new TreeSet<AbstractCurve> ();
         Set<AbstractBasicRegion> zs  = new TreeSet<AbstractBasicRegion> ();
         Set<AbstractBasicRegion> szs = new TreeSet<AbstractBasicRegion> ();
-        Set<AbstractSpider>      ss  = new TreeSet<AbstractSpider> ();
+        List<AbstractSpider>     ss  = new Vector<AbstractSpider> ();
 
         for (String c : contours) {
             cs.add(new AbstractCurve(CurveLabel.get(c)));
