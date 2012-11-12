@@ -2,6 +2,8 @@ package icircles.input;
 
 import icircles.abstractDescription.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,7 +22,13 @@ public class AbstractDiagram {
 
     /**
      * Constructor used by Jackson to deserialise JSON to AbstractDiagram
-     * Contours, Zones and ShadedZones cannot contain duplicates, Spiders can. 
+     * Contours, Zones and ShadedZones cannot contain duplicates, Spiders can.
+     * 
+     * The parameters to this constructor should be of type Set<Zone> etc...
+     * rather than Zone[].  However, due to Java's type erasure, it is much
+     * easier for code calling the distributed iCircles jar to find the type of
+     * Zone[].
+     * 
      * @param version
      * @param contours
      * @param zones
@@ -31,15 +39,15 @@ public class AbstractDiagram {
     @JsonCreator
     public AbstractDiagram (
             @JsonProperty(value="Version")     int version,
-            @JsonProperty(value="Contours")    Set<String> contours, 
-            @JsonProperty(value="Zones")       Set<Zone> zones,
-            @JsonProperty(value="ShadedZones") Set<Zone> shadedZones,
-            @JsonProperty(value="Spiders")     List<Spider> spiders) throws IllegalArgumentException {
+            @JsonProperty(value="Contours")    String[] contours, 
+            @JsonProperty(value="Zones")       Zone[] zones,
+            @JsonProperty(value="ShadedZones") Zone[] shadedZones,
+            @JsonProperty(value="Spiders")     Spider[] spiders) throws IllegalArgumentException {
         this.version     = version;
-        this.contours    = contours;
-        this.zones       = zones;
-        this.shadedZones = shadedZones;
-        this.spiders     = spiders;
+        this.contours    = new HashSet<String>(Arrays.asList(contours));
+        this.zones       = new HashSet<Zone>(Arrays.asList(zones));
+        this.shadedZones = new HashSet<Zone>(Arrays.asList(shadedZones));
+        this.spiders     = Arrays.asList(spiders);
 
         try {
             verify();

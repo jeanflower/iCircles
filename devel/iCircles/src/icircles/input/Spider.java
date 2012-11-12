@@ -2,6 +2,8 @@ package icircles.input;
 
 import icircles.abstractDescription.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,11 +14,19 @@ public class Spider {
     private String name;
     private Set <Zone> habitat;
 
+    /*
+     * Like all classes in icircles.input the Spider constructor takes a Zone[]
+     * as input rather than a Set<Zone> due to Java's erasure of generic type
+     * information.  The removal of generic type information makes it *really*
+     * difficult for calling code to recreate these types when given just the
+     * .class files.  To do otherwise would, effectively, require calling code
+     * to use iCircles as a compile-time depencency.
+     */
     @JsonCreator
     public Spider(@JsonProperty(value="name")    String name,
-                  @JsonProperty(value="habitat") Set <Zone> habitat) {
+                  @JsonProperty(value="habitat") Zone[] habitat) {
         this.name = name;
-        this.habitat = habitat;
+        this.habitat = new HashSet<Zone>(Arrays.asList(habitat));
     }
     
     public AbstractSpider toAbstractSpider (Set <AbstractCurve> contours) {

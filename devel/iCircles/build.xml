@@ -124,6 +124,10 @@ Build, test, run and package iCricles.
         <!-- Create the distribution directory -->
         <mkdir dir="${dist}/lib"/>
 
+        <!-- Package the Source with the Classes, needed for Jackson type information -->
+        <copy todir="${build}">
+            <fileset dir="${src}"/>
+        </copy>
         <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
         <jar jarfile="${dist}/lib/iCircles.jar" basedir="${build}"/>
     </target>

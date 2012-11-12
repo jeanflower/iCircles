@@ -2,6 +2,8 @@ package icircles.input;
 
 import icircles.abstractDescription.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,10 +15,13 @@ public class Zone {
     
     /**
      * We need to construct Zones for testing, so this provides the constructor.
+     * 
+     * The zone constructor takes a String[] rather than a Set<String> due to 
+     * the Java type erasure for generics.
      */
     @JsonCreator
-    public Zone (@JsonProperty(value="in") Set <String> in) {
-        this.in = in;
+    public Zone (@JsonProperty(value="in") String[] in) {
+        this.in = new HashSet<String>(Arrays.asList(in));
     }
 
     /**
