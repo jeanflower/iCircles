@@ -56,7 +56,7 @@ public class TestInputParser {
             fail();
         }
 
-        AbstractDiagram expected = new AbstractDiagram(0, new HashSet<String>(), new HashSet<Zone>(), new HashSet<Zone>(), new Vector<Spider>());
+        AbstractDiagram expected = new AbstractDiagram(0, new String[]{}, new Zone[]{}, new Zone[]{}, new Spider[]{});
         assertEquals(expected, ad);
     }
     

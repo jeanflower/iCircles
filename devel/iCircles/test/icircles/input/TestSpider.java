@@ -15,12 +15,12 @@ public class TestSpider {
     public void testVerify () {
         Set <String> cs = new HashSet<String>();
         cs.add("");
-        Zone         z  = new Zone(cs);
+        Zone         z  = new Zone(cs.toArray(new String[]{}));
         
         Set <String> c2 = new HashSet<String>();
         Set <Zone>   zs = new HashSet<Zone>();
-        zs.add(new Zone(c2));
-        Spider       s  = new Spider("s1", zs);
+        zs.add(new Zone(c2.toArray(new String[]{})));
+        Spider       s  = new Spider("s1", zs.toArray(new Zone[]{}));
 
         assertTrue(s.verify(zs));
     }
