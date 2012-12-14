@@ -1501,7 +1501,7 @@ public class DiagramCreator {
                 circles_copy, shadedZones, unshadedZones, spiders);
         CirclesPanel cp = new CirclesPanel("debug frame " + debug_frame_index, "no failure",
                 cd, true);
-        	
+            
         DEB.addFilmStripShot(cp);
     }
 }
