@@ -31,7 +31,6 @@ import icircles.concreteDiagram.ConcreteZone;
 import icircles.util.CannotDrawException;
 import icircles.util.DEB;
 
-
 public class CirclesPanel extends JPanel {
 
     /**
@@ -300,12 +299,12 @@ public class CirclesPanel extends JPanel {
                             (int) (leg.to.getX() * scaleFactor),
                             (int) (leg.to.getY() * scaleFactor));
                 }
-                if (s.as.getName() == null) {
+                if (s.as.get_name() == null) {
                     continue;
                 }
                 // TODO a proper way to place labels - it can't be a method in ConcreteSpider,
                 // we need the context in the ConcreteDiagram
-                ((Graphics2D) g).drawString(s.as.getName(),
+                ((Graphics2D) g).drawString(s.as.get_name(),
                         (int) ((s.feet.get(0).getX() - 5) * trans.getScaleX()),
                         (int) ((s.feet.get(0).getY() + 18) * trans.getScaleY()));
             }
@@ -344,8 +343,7 @@ public class CirclesPanel extends JPanel {
             return new CirclesPanel(diagText, failuremessage, size); // do use colors
     }
 
-    /*
-     * public static void main(String[] args) {
+    public static void main(String[] args) {
         // See the implementation of makeForTesting to see how to make an 
         // AbstractDescription from scratch.
         AbstractDescription ad = AbstractDescription.makeForTesting(
@@ -368,7 +366,7 @@ public class CirclesPanel extends JPanel {
         viewingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         viewingFrame.pack();
         viewingFrame.setVisible(true);
-    }*/
+    }
 
     ArrayList<CircleContour> getAllCircles() {
         return cd.getCircles();

@@ -120,8 +120,7 @@ public class ConcreteDiagram {
         return cd;
     }
 
-/*
- *     public static void main(String[] args) {
+    public static void main(String[] args) {
         //DEB.level = 3;
         AbstractDescription ad = AbstractDescription.makeForTesting("a ab b c",
                 true); // randomised shading
@@ -144,8 +143,7 @@ public class ConcreteDiagram {
         viewingFrame.pack();
         viewingFrame.setVisible(true);
     }
-*/
-    
+
     public ArrayList<ConcreteSpider> getSpiders() {
         return spiders;
     }
@@ -186,40 +184,6 @@ public class ConcreteDiagram {
                     double dist = Math.sqrt((p.x - f.getX()) * (p.x - f.getX())
                             + (p.y - f.getY()) * (p.y - f.getY()));
                     if (dist < ConcreteSpiderFoot.FOOT_RADIUS + 2) {
-                        return f;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Does same as {@link ConcreteDiagram#getSpiderFootAtPoint(java.awt.Point)},
-     * however, the hit-test is performed by scaling the distance with the
-     * scaling factor first.
-     *
-     * @param p the coordinates at which to look for a spider's foot. <p>These
-     * are the coordinates in the diagram's own local coordinate system. Thus,
-     * if you look up elements with a point in the coordinate system of {@link
-     * CirclesPanel2 a panel} then you first have to convert the coordinates
-     * of the point with {@link
-     * CirclesPanel2#toDiagramCoordinates(java.awt.Point)} and then use the
-     * resulting point as an argument to this method.</p>
-     * @param scaleFactor the scale factor with which to multiply the distance
-     * between the given point and particular spiders.
-     * @return the {@link ConcreteSpiderFoot spider foot} located at the given
-     * coordinates. <p>Returns {@code null} if no foot is located on the given
-     * coordinates.</p>
-     */
-    public ConcreteSpiderFoot getSpiderFootAtPoint(Point p, double scaleFactor) {
-        final double threshold = (ConcreteSpiderFoot.FOOT_RADIUS + 2)/scaleFactor;
-        if (getSpiders() != null) {
-            for (ConcreteSpider s : getSpiders()) {
-                for (ConcreteSpiderFoot f : s.feet) {
-                    double dist = Math.sqrt((p.x - f.getX()) * (p.x - f.getX())
-                            + (p.y - f.getY()) * (p.y - f.getY()));
-                    if (dist < threshold) {
                         return f;
                     }
                 }
