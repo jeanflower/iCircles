@@ -287,10 +287,17 @@ public class AbstractDescription {
      * makeForTesting family of methods is maintained for backward-compatibility of tests,
      * until we put in place a cleaner way to run the graphical tests.
      */
+    /*
+     * TODO This method will not be needed after the TestCode class is converted to use the 
+     * JSON input format and junit test framework.
+     */
     public static AbstractDescription makeForTesting(String s) {
     	return makeForTesting(s, false);
     }
-    
+    /*
+     * TODO This method will not be needed after the TestCode class is converted to use the 
+     * JSON input format and junit test framework.
+     */
     private static ArrayList<String> getDescriptors(String input_s)
     {
     	ArrayList<String> strings = new ArrayList<String>();
@@ -333,7 +340,10 @@ public class AbstractDescription {
 	    	}
     	}
     }
-    
+    /*
+     * TODO This method will not be needed after the TestCode class is converted to use the 
+     * JSON input format and junit test framework.
+     */
     public String makeForTesting(){
     	StringBuilder b = new StringBuilder();
     	for(AbstractBasicRegion zone : m_zones){
@@ -353,7 +363,10 @@ public class AbstractDescription {
     	}
     	return b.toString();
     }
-
+    /*
+     * TODO This method will not be needed after the TestCode class is converted to use the 
+     * JSON input format and junit test framework.
+     */
     public static AbstractDescription makeForTesting(String s, boolean random_shaded_zones) {
     	
     	ArrayList<String> descriptors = getDescriptors(s);
@@ -482,8 +495,13 @@ public class AbstractDescription {
         return result;
     }
 
-    // Build an AbstractDescription given a list of zones (no shaded zones or spiders).
-    // Initial version to allow Strings (longer than one char) as labels.
+    /*
+     * TODO This method will not be needed after the TestCode class is converted to use the 
+     * JSON input format and junit test framework.
+     * 
+     * Build an AbstractDescription given a list of zones (no shaded zones or spiders).
+     * Initial version to allow Strings (longer than one char) as labels.
+     */
     public static AbstractDescription makeForTesting(ArrayList<AbstractBasicRegion> zones) {
 
         TreeSet<AbstractBasicRegion> ad_zones = new TreeSet<AbstractBasicRegion>();
