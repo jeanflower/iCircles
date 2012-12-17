@@ -14,8 +14,9 @@ import icircles.recomposition.RecompositionStep;
 import icircles.recomposition.RecompositionStrategy;
 import icircles.test.TestData;
 import icircles.util.CannotDrawException;
+import icircles.util.Colors;
 import icircles.util.DEB;
-import java.awt.Color;
+
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
