@@ -78,13 +78,13 @@ public class AbstractCurve implements Comparable<AbstractCurve> {
     }
 
     /** 
-     * Only ever used by test code
+     * Only ever used by test code */
     public static void reset_id_counter() {
         id = 0;
         AbstractBasicRegion.clearLibrary();
         CurveLabel.clearLibrary();
     }
-    */
+    
 
     public String journalString() {
     return m_label.getLabel();

@@ -22,7 +22,8 @@ public class TestData {
     public static final int VIEW_ALL_TESTS = 3;
     public static final int TEST_PANEL_SIZE = 280;
     public static final boolean RANDOM_SHADING = false; // we don't have too many tests with shaded zones
-
+    public static Font font = new Font("Helvetica", Font.BOLD,  16);
+    
     public static boolean GENERATE_ALL_TEST_DATA = false; // with "run all tests", generates text for test_data array
 
     public static boolean TEST_EULER_THREE = false;

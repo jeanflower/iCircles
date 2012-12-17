@@ -1,41 +1,34 @@
 package icircles.concreteDiagram;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
-
-import org.w3c.dom.svg.SVGDocument;
-
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.*;
-
-import junit.framework.AssertionFailedError;
-
-import org.junit.*;
-import org.junit.rules.ErrorCollector;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
-
-
-import icircles.abstractDescription.*;
-import icircles.concreteDiagram.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import icircles.gui.CirclesSVGGenerator;
 import icircles.input.AbstractDiagram;
 import icircles.util.CannotDrawException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(value = Parameterized.class)
@@ -45,7 +38,7 @@ public class TestConcreteDiagram {
     public class DiagramCollector extends TestWatcher {
         @Override
         protected void failed(Throwable e, Description description) {
-            // draw failed diagram unless it cimport static org.hamcrest.Matchers.*;annot be drawn
+            // draw failed diagram unless it cannot be drawn
             if(null != currentDiagram) {
                 CirclesSVGGenerator csg = new CirclesSVGGenerator(currentDiagram);
                 

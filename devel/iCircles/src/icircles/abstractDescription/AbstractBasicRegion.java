@@ -248,6 +248,10 @@ public class AbstractBasicRegion implements Comparable<AbstractBasicRegion> {
         }
         return result;
     }
+    
+    public static void clearLibrary() {
+        m_library.clear();
+    }
 
     /**
      * Compares the label equivalence of two AbstractBasicRegion objects.  The
