@@ -132,17 +132,35 @@ public class DecompositionStrategyPiercing extends DecompositionStrategy {
         return true;
     }
 
+    /**
+     * For all non-zero positive values, find c where n=2^c.
+     * Using maxima we can solve for c (you could do it manually too :) ) 
+     * (%i1) n=2^c;
+     *                                          c
+     * (%o1)                               n = 2
+     * (%i2) solve(%, c);
+     *                                      log(n)
+     * (%o2)                            [c = ------]
+     *                                      log(2)
+     * We calculate c and return it if n = 2^c.
+     * 
+     * Note: this implementation fixes several bugs in the previous code,
+     * particularly an infinite while loop when n=0 was passed to the function.
+     * The function is now total over Ints.
+     * 
+     * @param n
+     * @return c where n=2^c, -1 otherwise.
+     */
     private int powerOfTwo(int n) // return result where  n = 2^(result)
     {
-        int result = 0;
-        while (n % 2 == 0) {
-            result++;
-            n /= 2;
-        }
-        if (n != 1) {
+        if(n <= 0)
             return -1;
-        } else {
-            return result;
-        }
+
+        int c = (int) (Math.log(n)/Math.log(2));
+
+        if(Math.pow(2,c) == n)
+            return c;
+        else
+            return -1;
     }
 }

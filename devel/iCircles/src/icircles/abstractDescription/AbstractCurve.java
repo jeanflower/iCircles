@@ -28,6 +28,10 @@ public class AbstractCurve implements Comparable<AbstractCurve> {
     }
 
     public int compareTo(AbstractCurve o) {
+        if(null == o) {
+            return 1; // null is less than anything
+        }
+
         int tmp = m_label.compareTo(o.m_label);
         if (tmp != 0) {
             return tmp;
@@ -67,19 +71,23 @@ public class AbstractCurve implements Comparable<AbstractCurve> {
 
     public double checksum() {
         if (DEB.level >= 2) {
-            System.out.println("build checksum from " + m_label.m_label 
-            		       + " (and not " + m_id + ")\ngiving "+m_label.checksum());
+            System.out.println("build checksum from " + m_label.getLabel()
+                           + " (and not " + m_id + ")\ngiving "+m_label.checksum());
         }
         return m_label.checksum() /* * m_id */;
     }
 
+    /** 
+     * Only ever used by test code
     public static void reset_id_counter() {
         id = 0;
         AbstractBasicRegion.clearLibrary();
         CurveLabel.clearLibrary();
     }
+    */
 
-	public String journalString() {
-		return m_label.m_label;
-	}
+    public String journalString() {
+    return m_label.getLabel();
+    }
+
 }

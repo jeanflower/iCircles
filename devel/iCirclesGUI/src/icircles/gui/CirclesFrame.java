@@ -98,7 +98,7 @@ public class CirclesFrame extends JFrame {
     }
 
     private void goDraw(String description, 
-    		            int decomp_strategy, int recomp_strategy) {
+                        int decomp_strategy, int recomp_strategy) {
 
         ConcreteDiagram cd = null;
         String failureMessage = null;
@@ -106,8 +106,8 @@ public class CirclesFrame extends JFrame {
             AbstractDescription adr = AbstractDescription.makeForTesting(description);
             DEB.out(1,  "draw "+adr.debug());
             DiagramCreator dc = new DiagramCreator(adr, 
-            		DecompositionStrategy.getStrategy(decomp_strategy), 
-            		RecompositionStrategy.getStrategy(recomp_strategy));
+                    DecompositionStrategy.getStrategy(decomp_strategy), 
+                    RecompositionStrategy.getStrategy(recomp_strategy));
             cd = dc.createDiagram(SIZE);
         } catch (CannotDrawException x) {
             failureMessage = x.message;
@@ -159,7 +159,7 @@ public class CirclesFrame extends JFrame {
     }
 
     class EscapeAction extends AbstractAction {
-    	
+        
         private static final long serialVersionUID = 1L;
 
         public void actionPerformed(ActionEvent ev) {
@@ -180,7 +180,7 @@ public class CirclesFrame extends JFrame {
         }
 
         void show(String description,
-        		String failureMessage,
+                String failureMessage,
                 ConcreteDiagram cd,
                 int SIZE,
                 boolean useColors) {
@@ -259,7 +259,7 @@ public class CirclesFrame extends JFrame {
             next.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                	if (testJTF.getText().length() == 0) {
+                    if (testJTF.getText().length() == 0) {
                         test_num = 0;
                     } else {
                         test_num += 1;
@@ -276,7 +276,7 @@ public class CirclesFrame extends JFrame {
             prev.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                	if (testJTF.getText().length() == 0) {
+                    if (testJTF.getText().length() == 0) {
                         test_num = 0;
                     } else {
                         test_num -= 1;

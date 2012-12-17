@@ -12,7 +12,6 @@ import icircles.recomposition.RecompData;
 import icircles.recomposition.Recomposer;
 import icircles.recomposition.RecompositionStep;
 import icircles.recomposition.RecompositionStrategy;
-import icircles.test.TestData;
 import icircles.util.CannotDrawException;
 import icircles.util.Colors;
 import icircles.util.DEB;
@@ -46,7 +45,8 @@ class AngleIterator {
 }
 
 public class DiagramCreator {
-
+    public static final Font font = new Font("Helvetica", Font.BOLD,  16);
+    
     AbstractDescription m_initial_diagram;
     final static int smallest_rad = 10;
     ArrayList<DecompositionStep> d_steps;
@@ -116,7 +116,7 @@ public class DiagramCreator {
 
         result = new ConcreteDiagram(new Rectangle2D.Double(0, 0, size, size),
                 circles, shadedZones, unshadedZones, spiders);
-        result.setFont(TestData.font);
+        result.setFont(font);
         DEB.showFilmStrip();
         }
         catch(CannotDrawException x)
@@ -154,7 +154,7 @@ public class DiagramCreator {
         
         if(Math.abs(se_x) < 0.001 && Math.abs(se_y) > 0.001)
         {
-        	sf_prop_leg = sf_proj_leg_y / se_y;
+            sf_prop_leg = sf_proj_leg_y / se_y;
         }
         if (DEB.level >= 3) {
             System.out.println("sf_perp_leg_len = "+sf_perp_leg_len +", sf_prop_leg = "+sf_prop_leg);
@@ -289,15 +289,15 @@ public class DiagramCreator {
         while(check_feet_placements){
         check_feet_placements = false;
         for (ConcreteSpider cs : spiders) {
-        	if(check_feet_placements)//(start again)
-        		break;
+            if(check_feet_placements)//(start again)
+                break;
             for (ConcreteSpiderFoot foot : cs.feet) {
                 // check whether foot is too close to another leg
-            	if(check_feet_placements)//(start again)
-            		break;
+                if(check_feet_placements)//(start again)
+                    break;
                 for (ConcreteSpider cs2 : spiders) {
-                	if(check_feet_placements)//(start again)
-                		break;
+                    if(check_feet_placements)//(start again)
+                        break;
                     for (ConcreteSpiderLeg leg : cs2.legs) {
                         if (leg.from == foot || leg.to == foot) {
                             // this leg is bound to be close to foot -it's attached!
@@ -319,61 +319,61 @@ public class DiagramCreator {
                             ConcreteZone cz = makeConcreteZone(abr);
                             Area a = new Area(cz.getShape(box));
                             
-                            double new_y = old_y + 2 * tol;
-//    	                    double new_x = old_x + 2 * tol;
+                            double new_y = old_y + 5 * tol;
+//                          double new_x = old_x + 2 * tol;
                             double new_x = old_x;
                             CircleContour test = new CircleContour(new_x, new_y, tol, null);
                             if (containedIn(test, a)) {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
-                            new_x = old_x - 2 * tol;
-                            new_y = old_y - 2 * tol;
+                            new_x = old_x - 5 * tol;
+                            new_y = old_y - 5 * tol;
                             test = new CircleContour(new_x, new_y, tol, null);
                             if (containedIn(test, a)) {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
-                            new_x = old_x + 2 * tol;
-                            new_y = old_y - 2 * tol;
+                            new_x = old_x + 5 * tol;
+                            new_y = old_y - 5 * tol;
                             test = new CircleContour(new_x, new_y, tol, null);
                             if (containedIn(test, a)) {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
-                            new_x = old_x - 2 * tol;
-                            new_y = old_y + 2 * tol;
+                            new_x = old_x - 5 * tol;
+                            new_y = old_y + 5 * tol;
                             test = new CircleContour(new_x, new_y, tol, null);
                             if (containedIn(test, a)) {
                                 foot.setX(new_x);
                                 foot.setY(new_y);
                                 if(foot_is_on_leg(foot, leg, tol)){
-                                	foot.setX(old_x);
-                                	foot.setY(old_y);
+                                    foot.setX(old_x);
+                                    foot.setY(old_y);
                                 }else{
                                     check_feet_placements = true; // if we moved one, start all over again!
-                                    break;                                	
+                                    break;                                  
                                 }
                             }
                         }
@@ -986,6 +986,13 @@ public class DiagramCreator {
         DEB_show_frame(3, debug_image_number, debug_size);
         debug_image_number++;
     }
+    private static Color[] colors = {
+        new Color(0, 100, 0), // dark green
+        Color.red,
+        Color.blue,
+        new Color(150, 50, 0),
+        new Color(0, 50, 150),
+        new Color(100, 0, 100)};
 
     private void set_colour(CircleContour cc) {
         String s = cc.ac.getLabel().getLabel();
@@ -994,11 +1001,11 @@ public class DiagramCreator {
         }
         char c = s.charAt(0);
         int n = Character.getNumericValue(c) - Character.getNumericValue('a');
-        while (n < Colors.COLORS.length) {
-            n += Colors.COLORS.length;
+        while (n < colors.length) {
+            n += colors.length;
         }
-        int col_index = n % Colors.COLORS.length;
-        cc.setColor(Colors.COLORS[col_index]);
+        int col_index = n % colors.length;
+        cc.setColor(colors[col_index]);
     }
 
     private CircleContour growCircleContour(Area a, AbstractCurve ac,
@@ -1494,7 +1501,7 @@ public class DiagramCreator {
                 circles_copy, shadedZones, unshadedZones, spiders);
         CirclesPanel cp = new CirclesPanel("debug frame " + debug_frame_index, "no failure",
                 cd, true);
-        	
+            
         DEB.addFilmStripShot(cp);
     }
 }
