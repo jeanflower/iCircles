@@ -1,5 +1,8 @@
 package icircles.concreteDiagram;
 
+import icircles.abstractDescription.AbstractCurve;
+import icircles.util.DEB;
+
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -7,10 +10,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
-import icircles.util.DEB;
-
-import icircles.abstractDescription.AbstractCurve;
 
 public class CircleContour {
 

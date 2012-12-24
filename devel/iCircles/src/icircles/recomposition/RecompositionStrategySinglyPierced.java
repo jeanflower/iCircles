@@ -1,14 +1,13 @@
 package icircles.recomposition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import icircles.util.DEB;
-
 import icircles.abstractDescription.AbstractBasicRegion;
 import icircles.abstractDualGraph.AbstractDualEdge;
 import icircles.abstractDualGraph.AbstractDualGraph;
 import icircles.abstractDualGraph.AbstractDualNode;
+import icircles.util.DEB;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RecompositionStrategySinglyPierced extends RecompositionStrategy {
 

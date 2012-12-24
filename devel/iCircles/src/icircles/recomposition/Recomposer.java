@@ -1,19 +1,17 @@
 package icircles.recomposition;
 
+import icircles.abstractDescription.AbstractBasicRegion;
+import icircles.abstractDescription.AbstractCurve;
+import icircles.abstractDescription.AbstractDescription;
+import icircles.decomposition.DecompositionStep;
+import icircles.util.DEB;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import icircles.util.DEB;
-
-import icircles.abstractDescription.AbstractDescription;
-import icircles.abstractDescription.AbstractCurve;
-import icircles.abstractDescription.AbstractBasicRegion;
-
-import icircles.decomposition.DecompositionStep;
 
 public class Recomposer {
 

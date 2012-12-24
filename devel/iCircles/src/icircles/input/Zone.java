@@ -1,6 +1,8 @@
 package icircles.input;
 
-import icircles.abstractDescription.*;
+import icircles.abstractDescription.AbstractBasicRegion;
+import icircles.abstractDescription.AbstractCurve;
+import icircles.abstractDescription.CurveLabel;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,7 +10,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Zone {
     private Set <String> in;

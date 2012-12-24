@@ -1,12 +1,12 @@
 package icircles.decomposition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.TreeSet;
-
 import icircles.abstractDescription.AbstractBasicRegion;
 import icircles.abstractDescription.AbstractCurve;
 import icircles.abstractDescription.AbstractDescription;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 public class DecompositionStrategyPiercing extends DecompositionStrategy {
 

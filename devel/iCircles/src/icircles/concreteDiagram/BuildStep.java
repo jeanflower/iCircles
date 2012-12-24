@@ -1,8 +1,8 @@
 package icircles.concreteDiagram;
 
-import java.util.ArrayList;
-
 import icircles.recomposition.RecompData;
+
+import java.util.ArrayList;
 
 public class BuildStep {
 

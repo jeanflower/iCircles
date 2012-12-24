@@ -1,9 +1,9 @@
 package icircles.recomposition;
 
-import java.util.ArrayList;
-
 import icircles.abstractDescription.AbstractBasicRegion;
 import icircles.abstractDescription.AbstractCurve;
+
+import java.util.ArrayList;
 
 public class RecompData {
 

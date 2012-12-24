@@ -30,8 +30,6 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
-import icircles.input.Zone;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.SortedSet;

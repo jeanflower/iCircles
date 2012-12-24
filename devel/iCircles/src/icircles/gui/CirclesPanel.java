@@ -1,5 +1,14 @@
 package icircles.gui;
 
+import icircles.abstractDescription.AbstractDescription;
+import icircles.concreteDiagram.CircleContour;
+import icircles.concreteDiagram.ConcreteDiagram;
+import icircles.concreteDiagram.ConcreteSpider;
+import icircles.concreteDiagram.ConcreteSpiderFoot;
+import icircles.concreteDiagram.ConcreteSpiderLeg;
+import icircles.concreteDiagram.ConcreteZone;
+import icircles.util.CannotDrawException;
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,21 +24,8 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import icircles.abstractDescription.AbstractDescription;
-
-import icircles.concreteDiagram.CircleContour;
-import icircles.concreteDiagram.ConcreteDiagram;
-import icircles.concreteDiagram.ConcreteSpider;
-import icircles.concreteDiagram.ConcreteSpiderFoot;
-import icircles.concreteDiagram.ConcreteSpiderLeg;
-import icircles.concreteDiagram.ConcreteZone;
-import icircles.util.CannotDrawException;
-import icircles.util.DEB;
 
 
 public class CirclesPanel extends JPanel {

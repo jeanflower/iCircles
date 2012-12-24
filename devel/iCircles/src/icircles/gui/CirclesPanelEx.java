@@ -26,8 +26,23 @@
  */
 package icircles.gui;
 
-import icircles.concreteDiagram.*;
-import java.awt.*;
+import icircles.concreteDiagram.CircleContour;
+import icircles.concreteDiagram.ConcreteDiagram;
+import icircles.concreteDiagram.ConcreteSpider;
+import icircles.concreteDiagram.ConcreteSpiderFoot;
+import icircles.concreteDiagram.ConcreteSpiderLeg;
+import icircles.concreteDiagram.ConcreteZone;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -36,11 +51,10 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.dom.GenericDOMImplementation;
-
-import org.w3c.dom.Document;
+import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  * This panel takes a {@link ConcreteDiagram concrete diagram} and draws it.

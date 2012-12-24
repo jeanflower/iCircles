@@ -24,7 +24,7 @@ public class TestData {
     public static final boolean RANDOM_SHADING = false; // we don't have too many tests with shaded zones
     public static Font font = new Font("Helvetica", Font.BOLD,  16);
     
-    public static boolean GENERATE_ALL_TEST_DATA = false; // with "run all tests", generates text for test_data array
+    public static boolean GENERATE_ALL_TEST_DATA = true; // with "run all tests", generates text for test_data array
 
     public static boolean TEST_EULER_THREE = false;
     
@@ -41,8 +41,8 @@ public class TestData {
     };  // a set of tests of particular interest
     //public static int TASK = RUN_TEST_LIST;
     //public static int TASK = VIEW_TEST_LIST;
-    //public static int TASK = RUN_ALL_TESTS;
-    public static int TASK = VIEW_ALL_TESTS;
+    public static int TASK = RUN_ALL_TESTS;
+    //public static int TASK = VIEW_ALL_TESTS;
 
     public static double scale = 1.0; // to test scaled diagrams look= OK
     public static boolean test_journalling = false;// converts String->AbstractDescription->String
@@ -249,7 +249,7 @@ public class TestData {
         /*127*/new TestDatum( "A B C AB AC BC ABC, B,A AB ABC, B, B", 0.0),
         /*127*/new TestDatum( "A B C AB AC BC ABC, B,A AB ABC, B, B", 0.0),
         /*128*/new TestDatum( ",", 0.0),
-        // Removed from test data as not it's invalid microsyntax /*129*/new TestDatum( ",,", 0.0),
+        // Removed from test data as it's invalid microsyntax /*129*/new TestDatum( ",,", 0.0),
         /*130*/new TestDatum( "a,,a .", 845.5434726364797),
         /*131*/new TestDatum( "a,.,a .,.", 1055.5206726364797),
         /*132*/new TestDatum( "a,.,a .,.,.,.", 2033.7907206364794),

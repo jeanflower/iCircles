@@ -31,17 +31,23 @@ package icircles.gui;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
-import icircles.input.AbstractDiagram;
 import icircles.abstractDescription.AbstractDescription;
 import icircles.concreteDiagram.DiagramCreator;
-import icircles.util.*;
-
-import org.apache.commons.cli.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import icircles.input.AbstractDiagram;
+import icircles.util.CannotDrawException;
 
 import java.io.File;
-import java.io.IOException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**

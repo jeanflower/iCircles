@@ -26,7 +26,7 @@ import javax.swing.KeyStroke;
 import icircles.abstractDescription.AbstractDescription;
 
 import icircles.recomposition.RecompositionStrategy;
-import icircles.test.TestData;
+import icircles.concreteDiagram.TestData;
 import icircles.util.CannotDrawException;
 import icircles.util.DEB;
 import icircles.concreteDiagram.ConcreteDiagram;

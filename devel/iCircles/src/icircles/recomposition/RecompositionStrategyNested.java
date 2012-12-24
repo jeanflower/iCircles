@@ -1,10 +1,9 @@
 package icircles.recomposition;
 
-import java.util.ArrayList;
-
+import icircles.abstractDescription.AbstractBasicRegion;
 import icircles.util.DEB;
 
-import icircles.abstractDescription.AbstractBasicRegion;
+import java.util.ArrayList;
 
 public class RecompositionStrategyNested extends RecompositionStrategy {
 

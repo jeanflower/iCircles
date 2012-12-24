@@ -1,10 +1,10 @@
 package icircles.decomposition;
 
-import java.util.ArrayList;
-
-import icircles.util.DEB;
-import icircles.abstractDescription.AbstractDescription;
 import icircles.abstractDescription.AbstractCurve;
+import icircles.abstractDescription.AbstractDescription;
+import icircles.util.DEB;
+
+import java.util.ArrayList;
 
 public abstract class DecompositionStrategy {
 

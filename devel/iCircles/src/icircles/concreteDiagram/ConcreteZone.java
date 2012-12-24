@@ -1,6 +1,7 @@
 package icircles.concreteDiagram;
 
 import icircles.abstractDescription.AbstractBasicRegion;
+
 import java.awt.Color;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;

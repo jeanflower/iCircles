@@ -30,10 +30,10 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
+import icircles.util.DEB;
+
 import java.util.Set;
 import java.util.TreeSet;
-
-import icircles.util.DEB;
 
 /**
  * Stores a label that can be applied to an {@link AbsractCurve}.

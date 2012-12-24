@@ -1,6 +1,11 @@
 package icircles.gui;
 
-import icircles.concreteDiagram.*;
+import icircles.concreteDiagram.CircleContour;
+import icircles.concreteDiagram.ConcreteDiagram;
+import icircles.concreteDiagram.ConcreteSpider;
+import icircles.concreteDiagram.ConcreteSpiderFoot;
+import icircles.concreteDiagram.ConcreteZone;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;

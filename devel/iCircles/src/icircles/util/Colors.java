@@ -44,6 +44,6 @@ public class Colors {
     	new Color(255, 128, 0),    //Orange
     };
     
-    public static Color[] COLORS = COLORS_MED;
+    public static Color[] COLORS = COLORS_BASIC;
 
 }

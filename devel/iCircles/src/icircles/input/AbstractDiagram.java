@@ -1,6 +1,10 @@
 package icircles.input;
 
-import icircles.abstractDescription.*;
+import icircles.abstractDescription.AbstractBasicRegion;
+import icircles.abstractDescription.AbstractCurve;
+import icircles.abstractDescription.AbstractDescription;
+import icircles.abstractDescription.AbstractSpider;
+import icircles.abstractDescription.CurveLabel;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,7 +13,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 // Make ShadowAbstractDiagram appear in serialised JSON as "AbstractDiagram"
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT, property="AbstractDiagram")

@@ -1,11 +1,11 @@
 package icircles.recomposition;
 
+import icircles.abstractDescription.AbstractDescription;
+import icircles.abstractDescription.CurveLabel;
+import icircles.util.DEB;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import icircles.util.DEB;
-import icircles.abstractDescription.CurveLabel;
-import icircles.abstractDescription.AbstractDescription;
 
 public class RecompositionStep {
 

@@ -1,8 +1,8 @@
 package icircles.recomposition;
 
-import java.util.Comparator;
-
 import icircles.abstractDescription.AbstractBasicRegion;
+
+import java.util.Comparator;
 
 public class ABRComparator implements Comparator<AbstractBasicRegion> {
 

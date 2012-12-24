@@ -1,7 +1,6 @@
 package icircles.concreteDiagram;
 
 import icircles.abstractDescription.AbstractDescription;
-import icircles.gui.CirclesPanel;
 import icircles.util.CannotDrawException;
 import icircles.util.DEB;
 
@@ -10,7 +9,6 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.JFrame;
 
 public class ConcreteDiagram {
 

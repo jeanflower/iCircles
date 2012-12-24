@@ -1,13 +1,12 @@
 package icircles.decomposition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
+import icircles.abstractDescription.AbstractBasicRegion;
+import icircles.abstractDescription.AbstractCurve;
+import icircles.abstractDescription.AbstractDescription;
 import icircles.util.DEB;
 
-import icircles.abstractDescription.AbstractDescription;
-import icircles.abstractDescription.AbstractCurve;
-import icircles.abstractDescription.AbstractBasicRegion;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DecompositionStrategyInnermost extends DecompositionStrategy {
 

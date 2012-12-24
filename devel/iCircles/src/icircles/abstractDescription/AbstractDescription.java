@@ -30,19 +30,17 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
+import icircles.util.DEB;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-// For makeForTesting and friends
-import java.util.StringTokenizer;
 import java.util.Random;
-
-import icircles.input.AbstractDiagram;
-import icircles.util.DEB;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+// For makeForTesting and friends
 
 /**
  * An AbstractDescription encapsulates the elements of a diagram, with no drawn information.

@@ -1,22 +1,32 @@
 package icircles.gui;
 
-import java.io.*;
+import icircles.concreteDiagram.CircleContour;
+import icircles.concreteDiagram.ConcreteDiagram;
+import icircles.concreteDiagram.ConcreteSpider;
+import icircles.concreteDiagram.ConcreteSpiderFoot;
+import icircles.concreteDiagram.ConcreteSpiderLeg;
+import icircles.concreteDiagram.ConcreteZone;
 
 import java.awt.Color;
-import java.awt.geom.*;
+import java.awt.geom.Area;
+import java.awt.geom.PathIterator;
+import java.io.StringWriter;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
-import org.apache.batik.svggen.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.dom.svg.*;
-
-import org.w3c.dom.*;
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 import org.w3c.dom.svg.SVGDocument;
-
-import icircles.concreteDiagram.*;
 
 public class CirclesSVGGenerator {
 
