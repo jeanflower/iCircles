@@ -45,7 +45,6 @@ public class TestData {
     //public static int TASK = VIEW_ALL_TESTS;
 
     public static double scale = 1.0; // to test scaled diagrams look= OK
-    public static boolean test_journalling = false;// converts String->AbstractDescription->String
     
     public static TestDatum[] test_data = {
         /*0*/new TestDatum( "a", 80.35747263647977),

@@ -1,16 +1,20 @@
 package icircles.concreteDiagram;
 
 import icircles.gui.CirclesPanel;
+import icircles.input.AbstractDiagram;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import icircles.concreteDiagram.ConcreteDiagram;
 import icircles.concreteDiagram.DiagramCreator;
@@ -21,13 +25,14 @@ import icircles.util.DEB;
 import icircles.abstractDescription.AbstractCurve;
 import icircles.abstractDescription.AbstractDescription;
 
+import com.fasterxml.jackson.core.JsonParser;
+
 /*
  * TODO Convert this class to use the JSON input format and junit test framework.
  */
 public class TestCode {
 
     public static void main(String args[]) {
-    	
         DEB.level = TestData.TEST_DEBUG_LEVEL;
         if (TestData.TASK == TestData.RUN_ALL_TESTS) {
             ArrayList<Integer> failures = runAllTests();
@@ -350,20 +355,21 @@ public class TestCode {
 
     private static ConcreteDiagram getDiagram(int test_num,
             int size) throws CannotDrawException {
-    	String desc = TestData.test_data[test_num].description;
-        // to test journalling...
-        if(TestData.test_journalling){
-        	//System.out.println("desc was "+desc);
-            AbstractDescription ad = AbstractDescription.makeForTesting(desc);
-            //System.out.println("ad is "+ad.debug());
-            desc = ad.makeForTesting();
-        	//System.out.println("desc is "+desc);
-        	
-        } 
-    		
-        AbstractCurve.reset_id_counter();
+
+    	String json_desc = TestData.test_data[test_num].toJSON();
+        ObjectMapper        m  = new ObjectMapper();
+        m.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+        AbstractDiagram adiag = null;
+        try {
+            adiag = m.readValue(json_desc, AbstractDiagram.class);
+        } catch (IOException e) { // JsonParseException | JsonMappingException
+            e.printStackTrace();
+            throw new CannotDrawException("cannot understand string");
+        }
         
-        AbstractDescription ad = AbstractDescription.makeForTesting(desc, TestData.RANDOM_SHADING);
+    	AbstractCurve.reset_id_counter();
+        
+        AbstractDescription ad = adiag.toAbstractDescription();
         DiagramCreator dc = new DiagramCreator(ad);
         ConcreteDiagram cd = dc.createDiagram(size);
         return cd;
