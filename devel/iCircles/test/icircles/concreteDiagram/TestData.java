@@ -41,8 +41,8 @@ public class TestData {
     };  // a set of tests of particular interest
     //public static int TASK = RUN_TEST_LIST;
     //public static int TASK = VIEW_TEST_LIST;
-    public static int TASK = RUN_ALL_TESTS;
-    //public static int TASK = VIEW_ALL_TESTS;
+    //public static int TASK = RUN_ALL_TESTS;
+    public static int TASK = VIEW_ALL_TESTS;
 
     public static double scale = 1.0; // to test scaled diagrams look= OK
     public static boolean test_journalling = false;// converts String->AbstractDescription->String
