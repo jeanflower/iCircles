@@ -5,7 +5,7 @@ a mail to pull from your branch.
 -->
 <project name="iCircles" default="dist" basedir=".">
     <description>
-Build, test, run and package iCricles.
+Build, test, run and package iCircles.
     </description>
     <!-- set global properties for this build -->
     <property name="src"   location="src"/>
