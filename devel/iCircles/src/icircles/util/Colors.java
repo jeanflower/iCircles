@@ -4,6 +4,7 @@ import java.awt.Color;
 
 public class Colors {
 	
+	private static int COLORS_TINY_INDEX = 0; 	
 	private static Color[] COLORS_TINY = {
         new Color(0, 100, 0), // dark green
         Color.red,
@@ -12,6 +13,7 @@ public class Colors {
         new Color(0, 50, 150),
         new Color(100, 0, 100)};
                       
+	private static int COLORS_MED_INDEX = 1; 	
     private static Color[] COLORS_MED = {
     	new Color(0xFF803E75), //Strong Purple
     	new Color(0xFFFF6800), //Vivid Orange
@@ -33,6 +35,7 @@ public class Colors {
     	new Color(0xFF232C16), //Dark Olive Green
                       };
     
+	private static int COLORS_BASIC_INDEX = 2; 	
     private static Color[] COLORS_BASIC = {
     	new Color(0, 0, 255),      //Blue
     	new Color(255, 0, 0),      //Red
@@ -44,6 +47,15 @@ public class Colors {
     	new Color(255, 128, 0),    //Orange
     };
     
-    public static Color[] COLORS = COLORS_BASIC;
-
+    private static int COLOR_INDEX = COLORS_BASIC_INDEX;
+    static{
+    	if(COLOR_INDEX == COLORS_TINY_INDEX){
+    		COLORS = COLORS_TINY;
+    	} else if(COLOR_INDEX == COLORS_MED_INDEX){
+    		COLORS = COLORS_MED;
+    	} else if(COLOR_INDEX == COLORS_BASIC_INDEX){
+    		COLORS = COLORS_BASIC;
+    	}
+    }
+    public static Color[] COLORS;
 }
