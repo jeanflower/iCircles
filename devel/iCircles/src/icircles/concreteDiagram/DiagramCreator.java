@@ -25,6 +25,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * A class which will provide an angle between 0 and 2pi.  For example,
+ * when fitting a single-piercing around part of an already-drawn circle,
+ * we could get an angle from this iterator and try putting the center of
+ * the piercing circle at that position.  To try more positions, add more
+ * potential angles to this iterator.  The order in which positions are
+ * attempted is determined by the order in which this iterator generates 
+ * possible angles.
+ */
 class AngleIterator {
 
     private int[] ints = {0, 8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
@@ -37,7 +46,7 @@ class AngleIterator {
         return index < ints.length - 1;
     }
 
-    public double next_angle() {
+    public double nextAngle() {
         index++;
         int mod_index = (index % ints.length);
         double angle = Math.PI * 2 * ints[mod_index] / (1.0 * ints.length);
@@ -45,7 +54,128 @@ class AngleIterator {
     }
 }
 
+/**
+ * An interface to provide a rough idea of sizes for zones (AbstractBasicRegions)
+ * and contours (AbstractCurves), beginning with an AbstractDescription and some
+ * recomposition steps (these determine the order in which we will (re)construct 
+ * the concrete diagram).  The get methods should return big numbers for zones 
+ * and contours which ought to be drawn large to accommodate other diagram features.  
+ *
+ */
+interface GuideSizeStrategy{
+    public double getGuideSize(AbstractCurve ac);
+    public Set<AbstractBasicRegion> getScoredZones();
+    public double getGuideSize(AbstractBasicRegion abr);
+}
+
+class JeansGuideSizeStrategy implements GuideSizeStrategy{
+    // input
+    AbstractDescription ad;
+    ArrayList<RecompositionStep> recompSteps;
+    
+    // output
+    HashMap<AbstractCurve, Double> guideSizes;
+    HashMap<AbstractBasicRegion, Double> zoneScores;
+    HashMap<AbstractCurve, Double> containedZoneScores;	
+
+    public JeansGuideSizeStrategy( AbstractDescription ad, 
+                                   ArrayList<RecompositionStep> recompSteps ){
+        this.ad = ad;
+        this.recompSteps = recompSteps;
+        guideSizes = new HashMap<AbstractCurve, Double>();
+        zoneScores = new HashMap<AbstractBasicRegion, Double>();
+        containedZoneScores = new HashMap<AbstractCurve, Double>();
+        
+        if (recompSteps.size() == 0) {
+            return ; // an empty diagram has no guide sizes
+        }
+
+        RecompositionStep last_step = recompSteps.get(recompSteps.size() - 1);
+        AbstractDescription last_diag = last_step.to();
+
+        // Each zone = AbstractBasicRegion will have a score.
+        // Large score for zones that will need to be big.
+        // Store them in a map.
+        double totalZoneScore = 0.0;
+        {
+            Iterator<AbstractBasicRegion> zIt = last_diag.getZoneIterator();
+            while (zIt.hasNext()) {
+                AbstractBasicRegion abr = zIt.next();
+                double score = scoreZone(abr, last_diag);
+                totalZoneScore += score;
+                zoneScores.put(abr, score);
+            }
+        }
+
+        // Each contour will contain a set of zones so inherits
+        // an accumulated score from that set of zone scores.
+        Iterator<AbstractCurve> cIt = last_diag.getContourIterator();
+        while (cIt.hasNext()) {
+            AbstractCurve ac = cIt.next();
+            double cScore = 0;
+            Iterator<AbstractBasicRegion> zIt = last_diag.getZoneIterator();
+            while (zIt.hasNext()) {
+                AbstractBasicRegion abr = zIt.next();
+                if (abr.is_in(ac)) {
+                    cScore += zoneScores.get(abr);
+                }
+            }
+            containedZoneScores.put(ac, cScore);
+            
+            // The guide size is a *magic* formula made up
+            // of the contained zone scores and the total of all
+            // zone scores.
+            double guide_size = Math.exp(0.75 * Math.log(cScore / totalZoneScore)) * 200;
+            guideSizes.put(ac, guide_size);
+        }
+    }
+    public double getGuideSize(AbstractCurve ac){
+        return guideSizes.get(ac);
+    }
+    public Set<AbstractBasicRegion> getScoredZones(){
+        return zoneScores.keySet();
+    }
+    public double getGuideSize(AbstractBasicRegion abr) {
+        return zoneScores.get(abr);
+    }
+
+    /**
+     * Apply a heuristic to gauge how big a zone should be in a drawn 
+     * diagram.  For the moment, a simple heuristic says that each zone 
+     * contributes the same value to the heuristics.  In the future, we
+     * might decide to weight some zones so that they provide larger
+     * values to the heuristics.
+     * @param abr
+     * @return
+     */
+    private static double scoreZone(AbstractBasicRegion abr, AbstractDescription ad) {
+        return 1.0;
+    }
+}
+
+/**
+ * The primary task of a DiagramCreator is to take an AbstractDescription
+ * and produce a ConcreteDiagram.  The constructors take in the AbstractDescription
+ * and potentially some more information to influence some of the choices
+ * which are made (the heuristics) when we define the geometry of the ConcreteDiagram.
+ * The main work takes place in DiagramCreator::createDiagram.
+ * The diagrams are drawn iteratively - we successively add groups of contours.
+ * We can this of the diagram as being built up in stages.  In the simplest case
+ * we add only one new contour at each stage, but to assist with symmetry, we
+ * sometimes add multiple contours in one stage.
+ * Not all diagrams can be drawn, because we try to ensure that contours can
+ * be visually distinguished and we might not find enough space to place them far 
+ * enough apart.  Except in very extreme circumstances, this could be considered
+ * a bug - a different choice at an earlier stage might have made it easier to
+ * fit a later contour into the diagram.  
+ * The task of taking an AbstractDescription and splitting the creation task into
+ * stages is called Decomposition/Recomposition.  The heuristics used to make
+ * choices there can be controlled using Strategy objects, passed to the 
+ * DiagramCreator constructor.  Other heuristics are, for the moment, hidden
+ * inside the createDiagram method (and the methods it calls).
+ */
 public class DiagramCreator {
+	// TODO : does this class really need to be concerned with fonts?
     public static final Font font = new Font("Helvetica", Font.BOLD,  16);
 
     // Specification about the task - what are we trying to draw,
@@ -54,14 +184,7 @@ public class DiagramCreator {
     final static int smallestRadius = 10;
     ArrayList<DecompositionStep> decompSteps;
     ArrayList<RecompositionStep> recompSteps;
-    
-    // Use heuristics about size - idealised or guide sizes aim to
-    // enable us to build contours big enough to accommodate further
-    // contours / zones inside that contour.  We'll choose these
-    // heuristics before we start choosing circle placement.
-    HashMap<AbstractBasicRegion, Double> zoneScores;// how big ought this zone be?
-    HashMap<AbstractCurve, Double> containedZoneScores; // how big are all its contained zones
-    HashMap<AbstractCurve, Double> guideSizes; // how big ought this circle be?
+    GuideSizeStrategy guideSizes;
     
     // Hold the results so far - for each AbstractCurve we will build
     // a CircleContour.
@@ -86,6 +209,7 @@ public class DiagramCreator {
         recompSteps.addAll(r.recompose(decompSteps));
         abstractToConcreteContourMap = new HashMap<AbstractCurve, CircleContour>();
         drawnCircles = new ArrayList<CircleContour>();
+        guideSizes = new JeansGuideSizeStrategy(ad, recompSteps);
     }
 
     /** In this constructor, we take the abstract description,
@@ -455,65 +579,7 @@ public class DiagramCreator {
      * Populates the map guideSizes.
      */
     private void makeGuideSizes() {
-        guideSizes = new HashMap<AbstractCurve, Double>();
-        if (recompSteps.size() == 0) {
-            return; // an empty diagram has no guide sizes
-        }
-
-        RecompositionStep last_step = recompSteps.get(recompSteps.size() - 1);
-        AbstractDescription last_diag = last_step.to();
-
-        // Each zone = AbstractBasicRegion will have a score.
-        // Large score for zones that will need to be big.
-        // Store them in a map.
-        zoneScores = new HashMap<AbstractBasicRegion, Double>();
-        double totalZoneScore = 0.0;
-        {
-            Iterator<AbstractBasicRegion> zIt = last_diag.getZoneIterator();
-            while (zIt.hasNext()) {
-                AbstractBasicRegion abr = zIt.next();
-                double score = scoreZone(abr, last_diag);
-                totalZoneScore += score;
-                zoneScores.put(abr, score);
-            }
-        }
-
-        // Each contour will contain a set of zones so inherits
-        // an accumulated score from that set of zone scores.
-        containedZoneScores = new HashMap<AbstractCurve, Double>();
-        Iterator<AbstractCurve> cIt = last_diag.getContourIterator();
-        while (cIt.hasNext()) {
-            AbstractCurve ac = cIt.next();
-            double cScore = 0;
-            Iterator<AbstractBasicRegion> zIt = last_diag.getZoneIterator();
-            while (zIt.hasNext()) {
-                AbstractBasicRegion abr = zIt.next();
-                if (abr.is_in(ac)) {
-                    cScore += zoneScores.get(abr);
-                }
-            }
-            containedZoneScores.put(ac, cScore);
-            
-            // The guide size is a *magic* formula made up
-            // of the contained zone scores and the total of all
-            // zone scores.
-            double guide_size = Math.exp(0.75 * Math.log(cScore / totalZoneScore)) * 200;
-            guideSizes.put(ac, guide_size);
-        }
-    }
-
-    /**
-     * Apply a heuristic to gauge how big a zone should be in a drawn 
-     * diagram.  For the moment, a simple heuristic says that each zone 
-     * contributes the same value to the heuristics.  In the future, we
-     * might decide to weight some zones so that they provide larger
-     * values to the heuristics.  Used by makeGuideSizes.
-     * @param abr
-     * @param context
-     * @return
-     */
-    private double scoreZone(AbstractBasicRegion abr, AbstractDescription context) {
-        return 1.0;
+    	
     }
 
     /**
@@ -650,7 +716,7 @@ public class DiagramCreator {
                     // Find out our guide size.  Assume the guide size for all
                     // our RecompDatas are equal - so just find out 1st.
                     AbstractCurve ac = rd.added_curve;
-                    double suggested_rad = guideSizes.get(ac);
+                    double suggested_rad = guideSizes.getGuideSize(ac);
 
                     // Build a set of AbstractCurves for all the circles we
                     // seek to insert.
@@ -698,7 +764,7 @@ public class DiagramCreator {
                     Area a = new Area(cz0.getShape(outerBox));
                     a.add(cz1.getShape(outerBox));
 
-                    double suggested_rad = guideSizes.get(piercingCurve);
+                    double suggested_rad = guideSizes.getGuideSize(piercingCurve);
 
                     DEB.show(4, a, "a for 1-piercings " + debugImageNumber);
 
@@ -719,7 +785,7 @@ public class DiagramCreator {
 
                     double center_of_circle_lies_on_rad = pierced_cc.radius;
 
-                    Set<AbstractBasicRegion> allZones = zoneScores.keySet();
+                    Set<AbstractBasicRegion> allZones = guideSizes.getScoredZones();
                     for (AbstractBasicRegion abr : allZones) {
                         DEB.out(1, "compare " + abr.debug() + " against " + piercingCurve.debug());
                         if (!abr.is_in(piercingCurve)) {
@@ -727,9 +793,9 @@ public class DiagramCreator {
                         }
                         DEB.out(1, "OK " + abr.debug() + " is in " + piercingCurve.debug() + ", so compare against " + pierced_ac.debug());
                         if (abr.is_in(pierced_ac)) {
-                            score_in_c += zoneScores.get(abr).doubleValue();
+                            score_in_c += guideSizes.getGuideSize(abr);
                         } else {
-                            score_out_of_c += zoneScores.get(abr).doubleValue();
+                            score_out_of_c += guideSizes.getGuideSize(abr);
                         }
                     }
                     DEB.out(3, "scores for " + piercingCurve + " are inside=" + score_in_c + " and outside=" + score_out_of_c);
@@ -742,7 +808,7 @@ public class DiagramCreator {
                         center_of_circle_lies_on_rad -= nudge;
                     }
 
-                    double guide_rad = guideSizes.get(thisBuildStep.recomp_data.get(0).added_curve);
+                    double guide_rad = guideSizes.getGuideSize(thisBuildStep.recomp_data.get(0).added_curve);
                     int sampleSize = (int) (Math.PI / Math.asin(guide_rad / pierced_cc.radius));
                     if (sampleSize >= thisBuildStep.recomp_data.size()) {
                         int num_ok = 0;
@@ -808,7 +874,7 @@ public class DiagramCreator {
 
             for (RecompData rd : thisBuildStep.recomp_data) {
                 AbstractCurve ac = rd.added_curve;
-                double suggested_rad = guideSizes.get(ac);
+                double suggested_rad = guideSizes.getGuideSize(ac);
                 if (rd.split_zones.size() == 1) {
                     // add a nested contour---------------------------------------------------
                     // add a nested contour---------------------------------------------------
@@ -902,7 +968,7 @@ public class DiagramCreator {
                     double center_of_circle_lies_on_rad = cc.radius;
                     double smallest_allowed_rad = smallestRadius;
 
-                    Set<AbstractBasicRegion> allZones = zoneScores.keySet();
+                    Set<AbstractBasicRegion> allZones = guideSizes.getScoredZones();
                     for (AbstractBasicRegion abr : allZones) {
                         DEB.out(1, "compare " + abr.debug() + " against " + c.debug());
                         if (!abr.is_in(rd.added_curve)) {
@@ -910,9 +976,9 @@ public class DiagramCreator {
                         }
                         DEB.out(1, "OK " + abr.debug() + " is in " + c.debug() + ", so compare against " + cc.debug());
                         if (abr.is_in(c)) {
-                            score_in_c += zoneScores.get(abr).doubleValue();
+                            score_in_c += guideSizes.getGuideSize(abr);
                         } else {
-                            score_out_of_c += zoneScores.get(abr).doubleValue();
+                            score_out_of_c += guideSizes.getGuideSize(abr);
                         }
                     }
                     DEB.out(3, "scores for " + c + " are inside=" + score_in_c + " and outside=" + score_out_of_c);
@@ -930,7 +996,7 @@ public class DiagramCreator {
                     // now place circles around cc, checking whether they fit into a
                     CircleContour solution = null;
                     for (AngleIterator ai = new AngleIterator(); ai.hasNext();) {
-                        double angle = ai.next_angle();
+                        double angle = ai.nextAngle();
                         double x = cc.cx + Math.cos(angle) * center_of_circle_lies_on_rad;
                         double y = cc.cy + Math.sin(angle) * center_of_circle_lies_on_rad;
                         if (a.contains(x, y)) {
@@ -947,7 +1013,7 @@ public class DiagramCreator {
                                     smallest_allowed_rad);
                             if (attempt != null) {
                                 solution = attempt;
-                                if (solution.radius == guideSizes.get(ac)) {
+                                if (solution.radius == guideSizes.getGuideSize(ac)) {
                                     break; // no need to try any more
                                 }
                             }
@@ -1069,8 +1135,8 @@ public class DiagramCreator {
                         if (abr.isLabelEquivalent(abr2)) {
                             DEB.out(2, "found matching abrs " + abr.debug() + ", " + abr2.debug());
                             // check scores match
-                            double abrScore = containedZoneScores.get(rd.added_curve);
-                            double abrScore2 = containedZoneScores.get(rd2.added_curve);
+                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
+                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
                             DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
                             DEB.out(2, "matched nestings " + abr.debug() + " and " + abr2.debug()
                                     + "\n with scores " + abrScore + " and " + abrScore2);
@@ -1102,8 +1168,8 @@ public class DiagramCreator {
 
                             DEB.out(2, "found matching abrs " + abr1.debug() + ", " + abr2.debug());
                             // check scores match
-                            double abrScore = containedZoneScores.get(rd.added_curve);
-                            double abrScore2 = containedZoneScores.get(rd2.added_curve);
+                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
+                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
                             DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
                             DEB.out(2, "matched piercings " + abr1.debug() + " and " + abr2.debug()
                                     + "\n with scores " + abrScore + " and " + abrScore2);
