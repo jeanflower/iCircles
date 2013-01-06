@@ -5,6 +5,7 @@ import icircles.abstractDescription.AbstractCurve;
 import icircles.abstractDescription.AbstractDescription;
 import icircles.abstractDescription.AbstractSpider;
 import icircles.abstractDescription.CurveLabel;
+import icircles.util.DEB;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -101,6 +102,12 @@ public class AbstractDiagram {
      * @return the AbstractDescription represented by this AbstractDiagram facade.
      */
     public AbstractDescription toAbstractDescription () {
+    	if(version != 0){
+    		// We might need to change something here when the version
+    		// changes.  To alert us to this, make a debug statement.
+    		DEB.out(1, "Warning : are we properly handling version number here?");
+    	}
+    	
         Set<AbstractCurve>       cs  = new TreeSet<AbstractCurve> ();
         Set<AbstractBasicRegion> zs  = new TreeSet<AbstractBasicRegion> ();
         Set<AbstractBasicRegion> szs = new TreeSet<AbstractBasicRegion> ();
