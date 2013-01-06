@@ -13,7 +13,7 @@ public class TestSpider {
     public void testVerify () {
         Set <String> cs = new HashSet<String>();
         cs.add("");
-        Zone         z  = new Zone(cs.toArray(new String[]{}));
+        new Zone(cs.toArray(new String[]{}));
         
         Set <String> c2 = new HashSet<String>();
         Set <Zone>   zs = new HashSet<Zone>();
