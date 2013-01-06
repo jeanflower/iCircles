@@ -32,7 +32,6 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -40,7 +39,6 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import org.jcheck.*;
 import org.jcheck.annotations.Configuration;
 import org.jcheck.annotations.Generator;
 

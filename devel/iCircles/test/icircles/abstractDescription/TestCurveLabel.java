@@ -3,7 +3,6 @@ package icircles.abstractDescription;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
-import org.jcheck.*;
 import org.jcheck.annotations.Configuration;
 
 import icircles.abstractDescription.CurveLabel;

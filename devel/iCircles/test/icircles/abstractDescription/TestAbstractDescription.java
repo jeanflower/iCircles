@@ -32,21 +32,13 @@ package icircles.abstractDescription;
  * policies, either expressed or implied, of the iCircles Project.
  */
 
-import java.util.ArrayList;
 import java.util.TreeSet;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.HashMap;
-import java.util.Random;
 
 import java.lang.reflect.Constructor;
 
 import org.junit.*;
-import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-
-import org.junit.runner.RunWith;
 
 /**
  * Tests for {@link AbstractDescription}.
@@ -123,7 +115,7 @@ public class TestAbstractDescription {
         //System.out.println("zone in ab "+zab.debug());
 
         ts.remove(ca1);
-        AbstractBasicRegion zb = AbstractBasicRegion.get(ts);
+        /*AbstractBasicRegion zb = */AbstractBasicRegion.get(ts);
         //System.out.println("zone in b "+zb.debug());
 
         ts.add(ca1);

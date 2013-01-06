@@ -4,9 +4,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import org.junit.*;
-import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 
 public class TestSpider {

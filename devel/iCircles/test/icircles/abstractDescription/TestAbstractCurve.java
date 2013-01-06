@@ -8,8 +8,6 @@ import static org.hamcrest.CoreMatchers.*;
 import org.jcheck.annotations.Configuration;
 import org.jcheck.annotations.Generator;
 
-import icircles.abstractDescription.*;
-
 /**
  * Tests for @AbstractCurve
  *

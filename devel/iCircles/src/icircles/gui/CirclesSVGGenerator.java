@@ -124,7 +124,7 @@ public class CirclesSVGGenerator {
                 Element circle = document.createElementNS(svgNS, "circle");
                 circle.setAttributeNS(null, "cx", Double.toString(f.getX()));
                 circle.setAttributeNS(null, "cy", Double.toString(f.getY()));
-                circle.setAttributeNS(null, "r", Double.toString(f.FOOT_RADIUS));
+                circle.setAttributeNS(null, "r", Double.toString(ConcreteSpiderFoot.FOOT_RADIUS));
                 circle.setAttributeNS(null, "z-index", Integer.toString(zOrder.SPIDER.ordinal()));
 
                 circle.setAttributeNS(null, "stroke", "black");

@@ -1,15 +1,6 @@
 package icircles.concreteDiagram;
 
 import java.awt.Font;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 public class TestData {
 
