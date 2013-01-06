@@ -30,9 +30,8 @@ public class TestDatum {
     }
 
     /**
-     * Return the description of the i'th TestDatum as a JSON string.
-     * @param i The index into test_data
-     * @return if i is out of bounds, return null, otherwise return a string in JSON format.
+     * Return the description of this TestDatum as a JSON string.
+     * @return return a string in JSON format.
      */
     public String toJSON() {
         StringBuilder json = new StringBuilder("{\"AbstractDiagram\":{\"Version\":0,");
@@ -66,7 +65,13 @@ public class TestDatum {
         return json.toString();
     }
 
-    private StringBuilder getContoursJSON(String zones) {
+    /**
+     * Derive a JSON description of the contours from a short-description of zones.
+     * For example, "A AB" produces "Contours":["A","B"]
+     * @return return a string in JSON format.
+     */
+    private static StringBuilder getContoursJSON(String zones) {
+    	    	
         StringBuilder json = new StringBuilder("\"Contours\":");
         // Remove spaces from the zones specification
         zones = zones.replaceAll(" ", "");
@@ -77,8 +82,15 @@ public class TestDatum {
         return json;
     }
 
-    private StringBuilder getZonesJSON(String zones) {
-        StringBuilder json = new StringBuilder("\"Zones\":");
+    /**
+     * Derive a JSON description of the zones from a short-description of zones.
+     * For example, if zones is A B AB
+     * then the json form is
+     * "Zones":[{"in": []},{"in":["B"]},{"in":["A"]},{"in":["A","B"]}]     
+     * @return return a string in JSON format.
+     */
+    private static StringBuilder getZonesJSON(String zones) {
+    	StringBuilder json = new StringBuilder("\"Zones\":");
 
         // Build the zones as a set of strings of the form {"in": ["a","b"]}
         Set <String> zs          = new HashSet<String>();
@@ -94,8 +106,12 @@ public class TestDatum {
         json.append(collectionToJSONArray(zs, false));
         return json;
     }
-
-    private StringBuilder getShadedZonesJSON(String zones) {
+    /**
+     * Derive a JSON description of the shaded zones from a short-description of zones.
+     * See comment for getZonesJSON  
+     * @return return a string in JSON format.
+     */
+    private static StringBuilder getShadedZonesJSON(String zones) {
         StringBuilder json = new StringBuilder("\"ShadedZones\":");
 
         // Build the zones as a set of strings of the form {"in": ["a","b"]}
@@ -125,7 +141,7 @@ public class TestDatum {
         return json;
     }
 
-    private StringBuilder getSpidersJSON(String spiders) {
+    private static StringBuilder getSpidersJSON(String spiders) {
         StringBuilder json = new StringBuilder("\"Spiders\":");
 
         // Use a List here as we can have many spiders with the same (name, habitat) pair
@@ -176,11 +192,11 @@ public class TestDatum {
         return json;
     }
 
-    private StringBuilder collectionToJSONArray(Collection c) {
+    private static StringBuilder collectionToJSONArray(Collection c) {
         return collectionToJSONArray(c, true);
     }
 
-    private StringBuilder collectionToJSONArray(Collection c, boolean withQuotes) {
+    private static StringBuilder collectionToJSONArray(Collection c, boolean withQuotes) {
         StringBuilder s    = new StringBuilder("[");
         Iterator      iter = c.iterator();
         while(iter.hasNext()) {
