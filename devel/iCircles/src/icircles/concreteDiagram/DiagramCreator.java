@@ -69,19 +69,13 @@ interface GuideSizeStrategy{
 }
 
 class JeansGuideSizeStrategy implements GuideSizeStrategy{
-    // input
-    AbstractDescription ad;
-    ArrayList<RecompositionStep> recompSteps;
-    
     // output
-    HashMap<AbstractCurve, Double> guideSizes;
-    HashMap<AbstractBasicRegion, Double> zoneScores;
-    HashMap<AbstractCurve, Double> containedZoneScores;	
+    private HashMap<AbstractCurve, Double> guideSizes;
+    private HashMap<AbstractBasicRegion, Double> zoneScores;
+    private HashMap<AbstractCurve, Double> containedZoneScores;	
 
     public JeansGuideSizeStrategy( AbstractDescription ad, 
                                    ArrayList<RecompositionStep> recompSteps ){
-        this.ad = ad;
-        this.recompSteps = recompSteps;
         guideSizes = new HashMap<AbstractCurve, Double>();
         zoneScores = new HashMap<AbstractBasicRegion, Double>();
         containedZoneScores = new HashMap<AbstractCurve, Double>();
@@ -154,6 +148,160 @@ class JeansGuideSizeStrategy implements GuideSizeStrategy{
 }
 
 /**
+ * Determine the order in which we build a diagram 
+ * (i.e. choose in which order circles will be placed).
+ * Optimisations include choosing a good order in which to add circles
+ * or choosing to draw lots of circles at once.  
+ * The BuildStep is the head of a linked list.
+ */
+interface BuildStepMaker{
+    public BuildStep make();
+}
+/**
+ * The simplest BuildStepMaker takes a sequence of recomposition steps
+ * and re-expresses those as a sequence of BUildSteops which each adds
+ * one contour.
+ */
+class SimpleBuildStepMaker implements BuildStepMaker{
+    private ArrayList<RecompositionStep> recompSteps;
+    
+    public SimpleBuildStepMaker( ArrayList<RecompositionStep> recompSteps ){
+        this.recompSteps = recompSteps;
+    }
+    public BuildStep make(){
+        BuildStep buildStepsHead = null;
+        BuildStep buildStepsTail = null;
+        for (RecompositionStep rs : recompSteps) {
+            // we need to add the new curves with regard to their placement
+            // relative to the existing ones in the map
+            Iterator<RecompData> it = rs.getRecompIterator();
+            while (it.hasNext()) {
+                RecompData rd = it.next();
+                BuildStep newOne = new BuildStep(rd);
+                if (buildStepsHead == null) {
+                    buildStepsHead = newOne;
+                    buildStepsTail = newOne;
+                } else {
+                    buildStepsTail.next = newOne;
+                    buildStepsTail = newOne;
+                }
+            }
+        }
+        return buildStepsHead;
+    }
+    
+}
+/**
+ * A better BuildStepMaker re-orders and combines the steps which add
+ * contours so that we can add groups of similar contours together to
+ * be more able to buidl diagrams with symmetry.
+ */
+
+class JeansBuildStepMaker implements BuildStepMaker{
+    private ArrayList<RecompositionStep> recompSteps;
+    private GuideSizeStrategy guideSizes;
+    
+    public JeansBuildStepMaker( ArrayList<RecompositionStep> recompSteps, 
+                                GuideSizeStrategy guideSizes ){
+        this.recompSteps = recompSteps;
+        this.guideSizes = guideSizes;
+    }
+    public BuildStep make(){
+        // Each RecompositionStep can yield a BuildStep.
+        // The simplest BuildStepMaker just does a 1-1 conversion
+        SimpleBuildStepMaker simpleConverter = new SimpleBuildStepMaker(recompSteps);
+        BuildStep buildStepsHead = simpleConverter.make();
+
+        // Now we apply some more intelligence to the BuildStep sequence.
+        // Reorder where useful and combine multiple steps into one
+        // to help us create diagrams with symmetry.
+
+        BuildStep bs = buildStepsHead;
+        while (bs != null) {
+            // Keep this BuildStep in the list but consider
+            // merging future BuildSteps into this one.
+            // Expect that the BuildStep has one RecompositionStep
+            // at the moment (i.e. one definition of how we want to add a 
+            // circle).
+            DEB.assertCondition(bs.recomp_data.size() == 1, "not ready for multistep");
+            //
+            if (bs.recomp_data.get(0).split_zones.size() == 1) {
+                // This BuildStep is about adding a circle into a zone,
+                // where the new circle is disjoint from all we have added
+                // so far (i.e. it's "nested").  
+                // Find out to which zone we will add this circle.
+                RecompData rd = bs.recomp_data.get(0);
+                AbstractBasicRegion abr = rd.split_zones.get(0);
+                // look ahead - are there other similar nested additions?
+                // Similar means that we will be adding a contour into the
+                // same zone, and that the guide size of the 
+                BuildStep beforefuturebs = bs;
+                while (beforefuturebs != null && beforefuturebs.next != null) {
+                    RecompData rd2 = beforefuturebs.next.recomp_data.get(0);
+                    if (rd2.split_zones.size() == 1) {
+                        AbstractBasicRegion abr2 = rd2.split_zones.get(0);
+                        if (abr.isLabelEquivalent(abr2)) {
+                            DEB.out(2, "found matching abrs " + abr.debug() + ", " + abr2.debug());
+                            // check scores match
+                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
+                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
+                            DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
+                            DEB.out(2, "matched nestings " + abr.debug() + " and " + abr2.debug()
+                                    + "\n with scores " + abrScore + " and " + abrScore2);
+                            if (abrScore == abrScore2) {
+                                // unhook futurebs and insert into list after bs
+                                BuildStep to_move = beforefuturebs.next;
+                                beforefuturebs.next = to_move.next;
+
+                                bs.recomp_data.add(to_move.recomp_data.get(0));
+                            }
+                        }
+                    }
+                    beforefuturebs = beforefuturebs.next;
+                }// loop through futurebs's to see if we insert another
+            }// check - are we adding a nested contour?
+            else if (bs.recomp_data.get(0).split_zones.size() == 2) {// we are adding a 1-piercing
+                RecompData rd = bs.recomp_data.get(0);
+                AbstractBasicRegion abr1 = rd.split_zones.get(0);
+                AbstractBasicRegion abr2 = rd.split_zones.get(1);
+                // look ahead - are there other similar 1-piercings?
+                BuildStep beforefuturebs = bs;
+                while (beforefuturebs != null && beforefuturebs.next != null) {
+                    RecompData rd2 = beforefuturebs.next.recomp_data.get(0);
+                    if (rd2.split_zones.size() == 2) {
+                        AbstractBasicRegion abr3 = rd2.split_zones.get(0);
+                        AbstractBasicRegion abr4 = rd2.split_zones.get(1);
+                        if ((abr1.isLabelEquivalent(abr3) && abr2.isLabelEquivalent(abr4))
+                                || (abr1.isLabelEquivalent(abr4) && abr2.isLabelEquivalent(abr3))) {
+
+                            DEB.out(2, "found matching abrs " + abr1.debug() + ", " + abr2.debug());
+                            // check scores match
+                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
+                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
+                            DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
+                            DEB.out(2, "matched piercings " + abr1.debug() + " and " + abr2.debug()
+                                    + "\n with scores " + abrScore + " and " + abrScore2);
+                            if (abrScore == abrScore2) {
+                                // unhook futurebs and insert into list after bs
+                                BuildStep to_move = beforefuturebs.next;
+                                beforefuturebs.next = to_move.next;
+
+                                bs.recomp_data.add(to_move.recomp_data.get(0));
+                                continue;
+                            }
+                        }
+                    }
+                    beforefuturebs = beforefuturebs.next;
+                }// loop through futurebs's to see if we insert another
+            }
+
+            bs = bs.next;
+        }// bsloop
+        return buildStepsHead;
+    }
+}
+
+/**
  * The primary task of a DiagramCreator is to take an AbstractDescription
  * and produce a ConcreteDiagram.  The constructors take in the AbstractDescription
  * and potentially some more information to influence some of the choices
@@ -185,6 +333,7 @@ public class DiagramCreator {
     ArrayList<DecompositionStep> decompSteps;
     ArrayList<RecompositionStep> recompSteps;
     GuideSizeStrategy guideSizes;
+    BuildStepMaker buildStepMaker;
     
     // Hold the results so far - for each AbstractCurve we will build
     // a CircleContour.
@@ -194,6 +343,18 @@ public class DiagramCreator {
     // Indices for debugging data collection
     int debugImageNumber = 0;
     int debugSize = 50;
+    
+    private void init(){
+        Decomposer d = new Decomposer();
+        decompSteps.addAll(d.decompose(abstractDiagram));
+        Recomposer r = new Recomposer();
+        recompSteps.addAll(r.recompose(decompSteps));
+        abstractToConcreteContourMap = new HashMap<AbstractCurve, CircleContour>();
+        drawnCircles = new ArrayList<CircleContour>();
+        guideSizes = new JeansGuideSizeStrategy(abstractDiagram, recompSteps);
+        //buildStepMaker = new SimpleBuildStepMaker(recompSteps);
+        buildStepMaker = new JeansBuildStepMaker(recompSteps, guideSizes);
+    }
 
     /** In this constructor, we take the abstract description,
     * and do some analysis of it.   We build a decomposition
@@ -203,13 +364,7 @@ public class DiagramCreator {
         abstractDiagram = ad;
         decompSteps = new ArrayList<DecompositionStep>();
         recompSteps = new ArrayList<RecompositionStep>();
-        Decomposer d = new Decomposer();
-        decompSteps.addAll(d.decompose(ad));
-        Recomposer r = new Recomposer();
-        recompSteps.addAll(r.recompose(decompSteps));
-        abstractToConcreteContourMap = new HashMap<AbstractCurve, CircleContour>();
-        drawnCircles = new ArrayList<CircleContour>();
-        guideSizes = new JeansGuideSizeStrategy(ad, recompSteps);
+        init();
     }
 
     /** In this constructor, we take the abstract description,
@@ -222,12 +377,7 @@ public class DiagramCreator {
         abstractDiagram = ad;
         decompSteps = new ArrayList<DecompositionStep>();
         recompSteps = new ArrayList<RecompositionStep>();
-        Decomposer d = new Decomposer(decomp_strategy);
-        decompSteps.addAll(d.decompose(ad));
-        Recomposer r = new Recomposer(recomp_strategy);
-        recompSteps.addAll(r.recompose(decompSteps));
-        abstractToConcreteContourMap = new HashMap<AbstractCurve, CircleContour>();
-        drawnCircles = new ArrayList<CircleContour>();
+        init();
     }
 
     /** Do the bulk of the work to create a diagram. 
@@ -660,32 +810,9 @@ public class DiagramCreator {
 	 */
     private boolean createCircles() throws CannotDrawException {
     	// Make a linked list of BuildSteps from the recomposition
-    	// sequence.  Each BuildStep corresponds to some RecompositionSteps.
-    	// Initially, one RecompositionStep in each BuildStep, but we can
-    	// merge many RecompositionSteps together into one BuildStep.
-        BuildStep buildStepsHead = null;
-        BuildStep buildStepsTail = null;
-        for (RecompositionStep rs : recompSteps) {
-            // we need to add the new curves with regard to their placement
-            // relative to the existing ones in the map
-            Iterator<RecompData> it = rs.getRecompIterator();
-            while (it.hasNext()) {
-                RecompData rd = it.next();
-                BuildStep newOne = new BuildStep(rd);
-                if (buildStepsHead == null) {
-                    buildStepsHead = newOne;
-                    buildStepsTail = newOne;
-                } else {
-                    buildStepsTail.next = newOne;
-                    buildStepsTail = newOne;
-                }
-            }
-        }
-
-        // Before we actually build anything (make any choices about
-        // circle placement), re-order or merge steps together.
-        shuffle_and_combine(buildStepsHead);
-
+    	// sequence.  Each BuildStep can corresponds to some RecompositionSteps.
+        BuildStep buildStepsHead = buildStepMaker.make();
+ 
         // Iterate through the sequence of BuildSteps, incrementally
         // building up the drawn diagram by choosing the circle placement
         // for the circles in each BuildStep.
@@ -1093,102 +1220,6 @@ public class DiagramCreator {
         }// go to next BuildStep
 
         return true;
-    }
-
-    /**
-     * Consider whether we might be able to optimise the order in 
-     * which we "build" a diagram (i.e. choose where circles will be placed).
-     * Optimisations include choosing a good order in which to add circles
-     * or choosing to draw lots of circles at once. 
-     * @param stepListHead
-     */
-    private void shuffle_and_combine(BuildStep stepListHead) {
-        // collect together additions which are
-        //  (i) nested in the same zone
-        //  (ii) single-piercings with the same zones
-        //  (iii) will have the same radius (have the same "score")
-
-        BuildStep bs = stepListHead;
-        while (bs != null) {
-        	// Keep this BuildStep in the list but consider
-        	// merging future BuildSteps into this one.
-        	// Expect that the BuildStep has one RecompositionStep
-        	// at the moment (i.e. one definition of how we want to add a 
-        	// circle).
-            DEB.assertCondition(bs.recomp_data.size() == 1, "not ready for multistep");
-            //
-            if (bs.recomp_data.get(0).split_zones.size() == 1) {
-            	// This BuildStep is about adding a circle into a zone,
-            	// where the new circle is disjoint from all we have added
-            	// so far (i.e. it's "nested").  
-            	// Find out to which zone we will add this circle.
-                RecompData rd = bs.recomp_data.get(0);
-                AbstractBasicRegion abr = rd.split_zones.get(0);
-                // look ahead - are there other similar nested additions?
-                // Similar means that we will be adding a contour into the
-                // same zone, and that the guide size of the 
-                BuildStep beforefuturebs = bs;
-                while (beforefuturebs != null && beforefuturebs.next != null) {
-                    RecompData rd2 = beforefuturebs.next.recomp_data.get(0);
-                    if (rd2.split_zones.size() == 1) {
-                        AbstractBasicRegion abr2 = rd2.split_zones.get(0);
-                        if (abr.isLabelEquivalent(abr2)) {
-                            DEB.out(2, "found matching abrs " + abr.debug() + ", " + abr2.debug());
-                            // check scores match
-                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
-                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
-                            DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
-                            DEB.out(2, "matched nestings " + abr.debug() + " and " + abr2.debug()
-                                    + "\n with scores " + abrScore + " and " + abrScore2);
-                            if (abrScore == abrScore2) {
-                                // unhook futurebs and insert into list after bs
-                                BuildStep to_move = beforefuturebs.next;
-                                beforefuturebs.next = to_move.next;
-
-                                bs.recomp_data.add(to_move.recomp_data.get(0));
-                            }
-                        }
-                    }
-                    beforefuturebs = beforefuturebs.next;
-                }// loop through futurebs's to see if we insert another
-            }// check - are we adding a nested contour?
-            else if (bs.recomp_data.get(0).split_zones.size() == 2) {// we are adding a 1-piercing
-                RecompData rd = bs.recomp_data.get(0);
-                AbstractBasicRegion abr1 = rd.split_zones.get(0);
-                AbstractBasicRegion abr2 = rd.split_zones.get(1);
-                // look ahead - are there other similar 1-piercings?
-                BuildStep beforefuturebs = bs;
-                while (beforefuturebs != null && beforefuturebs.next != null) {
-                    RecompData rd2 = beforefuturebs.next.recomp_data.get(0);
-                    if (rd2.split_zones.size() == 2) {
-                        AbstractBasicRegion abr3 = rd2.split_zones.get(0);
-                        AbstractBasicRegion abr4 = rd2.split_zones.get(1);
-                        if ((abr1.isLabelEquivalent(abr3) && abr2.isLabelEquivalent(abr4))
-                                || (abr1.isLabelEquivalent(abr4) && abr2.isLabelEquivalent(abr3))) {
-
-                            DEB.out(2, "found matching abrs " + abr1.debug() + ", " + abr2.debug());
-                            // check scores match
-                            double abrScore = guideSizes.getGuideSize(rd.added_curve);
-                            double abrScore2 = guideSizes.getGuideSize(rd2.added_curve);
-                            DEB.assertCondition(abrScore > 0 && abrScore2 > 0, "zones must have score");
-                            DEB.out(2, "matched piercings " + abr1.debug() + " and " + abr2.debug()
-                                    + "\n with scores " + abrScore + " and " + abrScore2);
-                            if (abrScore == abrScore2) {
-                                // unhook futurebs and insert into list after bs
-                                BuildStep to_move = beforefuturebs.next;
-                                beforefuturebs.next = to_move.next;
-
-                                bs.recomp_data.add(to_move.recomp_data.get(0));
-                                continue;
-                            }
-                        }
-                    }
-                    beforefuturebs = beforefuturebs.next;
-                }// loop through futurebs's to see if we insert another
-            }
-
-            bs = bs.next;
-        }// bsloop
     }
 
     /**
