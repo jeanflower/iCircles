@@ -367,7 +367,7 @@ public class DiagramCreator {
         init();
     }
 
-    /** In this constructor, we take the abstract description,
+    /** In this constructor, we take the abstract description
     * and do some analysis of it.   We build a decomposition
     * and recomposition using the specified strategies.
     */
